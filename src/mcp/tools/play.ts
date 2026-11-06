@@ -6,6 +6,7 @@ import { requireConnected, requireSuccessfulTestBuild, requireUiApproval, consum
 import { nowIso } from "../../state/store.js";
 import type { State } from "../../state/schema.js";
 import { GooglePlay, IMAGE_TYPES, explainPlayError, LISTING_LIMITS } from "../../services/play.js";
+import { getFetch } from "../../lib/http.js";
 
 const FIRST_RELEASE_NOTE =
   "Google Play limitation: the app record and the very first release must be created manually in Play Console (the API cannot create apps).";
@@ -202,11 +203,17 @@ export const playPublish = defineTool({
       releaseNotes: a.release_notes ? [{ language: a.language ?? "en-US", text: a.release_notes }] : undefined,
     };
 
-    const versionCode = await guarded(pkg, () => gp.latestVersionCode(pkg));
+    // Prefer the newest Codemagic release build's AAB (uploaded on publish).
+    const aab = latestReleaseAab(state);
+    const uploadedCode = await guarded(pkg, () => gp.latestVersionCode(pkg));
+    const versionCode = uploadedCode ?? (aab ? -1 : undefined);
     if (versionCode === undefined) {
       throw new GateError(`No app bundle has been uploaded to Google Play for ${pkg}.`, `Upload the first .aab manually in Play Console (or via the Codemagic Play publishing step). ${FIRST_RELEASE_NOTE}`);
     }
 
+    if (a.dry_run && uploadedCode === undefined) {
+      return { dry_run: true, would_do: `Upload the AAB from release build ${aab!.buildId} and release it to the "${track}" track (as a draft if the app is still a draft in Play Console).` };
+    }
     if (a.dry_run) {
       const r = await guarded(pkg, () => gp.publishToTrack(pkg, track, { ...opts, versionCodes: [versionCode], validateOnly: true }));
       return {
@@ -222,7 +229,7 @@ export const playPublish = defineTool({
       ctx,
       `play_publish:${track}`,
       `Publish to Google Play (${track})`,
-      `Release ${pkg} versionCode ${versionCode} to the ${track} track${a.release_notes ? ` with release notes: "${a.release_notes.slice(0, 120)}"` : ""}.`,
+      `Release ${pkg} ${aab ? `(new build ${aab.buildId})` : `versionCode ${versionCode}`} to the ${track} track${a.release_notes ? ` with release notes: "${a.release_notes.slice(0, 120)}"` : ""}.`,
       { package_name: pkg, track, version_code: versionCode, release_name: a.release_name ?? null, release_notes: a.release_notes ?? null },
     );
 
@@ -230,7 +237,24 @@ export const playPublish = defineTool({
       s.stages.store = { status: "in_progress", updatedAt: nowIso() };
     });
     try {
-      const r = await guarded(pkg, () => gp.publishToTrack(pkg, track, { ...opts, versionCodes: [versionCode] }));
+      let r: Awaited<ReturnType<typeof gp.publishToTrack>> | undefined;
+      if (aab && !consumedAab(state, aab.buildId)) {
+        const file = await downloadAab(ctx, aab.url, aab.buildId);
+        try {
+          const up: any = await guarded(pkg, () => gp.uploadBundle(pkg, file, { track, ...opts }));
+          r = { status: up?.status ?? "completed", sentForReview: up?.sentForReview ?? true, preserved: up?.preserved ?? 0, notes: up?.notes ?? [] } as any;
+          ctx.store.update((s) => {
+            s.log.push({ at: nowIso(), level: "info", source: "play", message: `Uploaded AAB from build ${aab.buildId}` });
+            s.approvals.push({ id: `aab_${aab.buildId}`, action: "aab_uploaded", title: aab.buildId, summary: "", payload: {}, status: "consumed", createdAt: nowIso() });
+          });
+        } catch (e) {
+          if (!/already (been )?used|versionCode/i.test((e as Error).message) || uploadedCode === undefined) throw e;
+        }
+      }
+      if (!r) {
+        if (uploadedCode === undefined) throw new GateError("No bundle available to publish.", FIRST_RELEASE_NOTE);
+        r = await guarded(pkg, () => gp.publishToTrack(pkg, track, { ...opts, versionCodes: [uploadedCode] }));
+      }
       consumeApproval(ctx, approvalId);
       const done = r.status !== "draft" && r.sentForReview;
       ctx.store.update((s) => {
@@ -302,3 +326,24 @@ export const playReply = defineTool({
 });
 
 export const playTools: ToolDef<any>[] = [playListingGet, playListingUpdate, playScreenshotsUpload, playTrackStatus, playPublish, playReviews, playReply];
+
+function latestReleaseAab(state: State): { buildId: string; url: string } | undefined {
+  const b = [...state.builds].reverse().find((x) => x.kind === "release" && x.platform === "android" && x.status === "finished");
+  const art = b?.artifacts.find((x) => x.name.endsWith(".aab"));
+  return b && art ? { buildId: b.id, url: art.url } : undefined;
+}
+
+function consumedAab(state: State, buildId: string) {
+  return state.approvals.some((x) => x.id === `aab_${buildId}`);
+}
+
+async function downloadAab(ctx: Ctx, url: string, buildId: string): Promise<string> {
+  const token = ctx.secrets.get("codemagic")?.token;
+  const res = await getFetch()(url, { headers: token ? { "x-auth-token": token } : {} });
+  if (!res.ok) throw new Error(`Could not download the AAB from Codemagic (HTTP ${res.status}). Run build_status for build ${buildId} to refresh links.`);
+  const dir = path.join(ctx.store.p.dir, "builds");
+  fs.mkdirSync(dir, { recursive: true });
+  const file = path.join(dir, `${buildId}.aab`);
+  fs.writeFileSync(file, Buffer.from(await res.arrayBuffer()));
+  return file;
+}

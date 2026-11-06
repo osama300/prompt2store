@@ -1,0 +1,60 @@
+{
+  "id": "chk_c8ed56411c",
+  "startedAt": "2026-11-06T18:45:30.956Z",
+  "finishedAt": "2026-11-06T18:45:48.350Z",
+  "passed": true,
+  "items": [
+    {
+      "name": "dependencies",
+      "status": "passed",
+      "summary": "flutter pub get OK",
+      "details": [],
+      "durationMs": 741
+    },
+    {
+      "name": "analyze",
+      "status": "passed",
+      "summary": "0 errors, 0 warnings, 0 infos",
+      "details": [],
+      "durationMs": 7686
+    },
+    {
+      "name": "format",
+      "status": "passed",
+      "summary": "Code is formatted",
+      "details": [],
+      "durationMs": 165
+    },
+    {
+      "name": "tests",
+      "status": "passed",
+      "summary": "17 passed, 0 failed, 0 skipped",
+      "details": [],
+      "durationMs": 3995
+    },
+    {
+      "name": "screenshots",
+      "status": "passed",
+      "summary": "4 screenshots rendered",
+      "details": [
+        ".prompt-to-store/checks/screens/phone/01_today.png",
+        ".prompt-to-store/checks/screens/phone/02_habit_detail.png",
+        ".prompt-to-store/checks/screens/phone/03_add_habit.png",
+        ".prompt-to-store/checks/screens/phone/04_stats.png"
+      ],
+      "durationMs": 4787
+    },
+    {
+      "name": "build",
+      "status": "skipped",
+      "summary": "No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze.",
+      "details": []
+    }
+  ],
+  "screenshots": [
+    "checks/screens/phone/01_today.png",
+    "checks/screens/phone/02_habit_detail.png",
+    "checks/screens/phone/03_add_habit.png",
+    "checks/screens/phone/04_stats.png"
+  ]
+}
