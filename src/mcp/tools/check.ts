@@ -16,6 +16,7 @@ import {
   run,
 } from "../../check/flutter.js";
 import { SCREENSHOT_TEST_FILE, screenshotTestSource } from "../../check/screenshots.js";
+import { sourceFingerprint } from "../../check/fingerprint.js";
 
 const toolsEnv = defineTool({
   name: "env_check",
@@ -192,7 +193,7 @@ const checkRun = defineTool({
 
     const passed = !items.some((i) => i.status === "failed");
     const shots = fs.existsSync(ctx.store.p.screenshots) ? walk(ctx.store.p.screenshots).filter((f) => f.endsWith(".png")).map((f) => path.relative(ctx.store.p.dir, f)) : [];
-    const runRec: CheckRun = { id, startedAt, finishedAt: nowIso(), passed, items, screenshots: shots };
+    const runRec: CheckRun = { id, startedAt, finishedAt: nowIso(), passed, items, screenshots: shots, fingerprint: sourceFingerprint(root) };
     fs.mkdirSync(ctx.store.p.checks, { recursive: true });
     fs.writeFileSync(path.join(ctx.store.p.checks, "last.json"), JSON.stringify(runRec, null, 2));
     ctx.store.update((s) => {

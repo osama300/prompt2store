@@ -1,6 +1,6 @@
 ---
 name: doctor
-description: Diagnose and fix failed Flutter builds (local or Codemagic) and Google Play / App Store rejections using prompt-to-store's build_logs and the known-issues list in rejections.md. Use when a build fails, a store rejects the app, or a publish tool returns an error.
+description: Diagnoses and fixes failed Flutter builds (local or Codemagic) and Google Play / App Store rejections, using prompt-to-store's build_logs and the known-issues list in rejections.md. Use when a build fails, a store rejects the app, or a publish tool returns an error.
 ---
 
 # Doctor

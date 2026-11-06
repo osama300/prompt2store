@@ -243,7 +243,7 @@ const shipTestBuild = defineTool({
     return {
       started: started.map((b) => ({ build_id: b.id, platform: b.platform, url: b.url })),
       steps: prep.steps,
-      next_step: "Builds take ~5–15 minutes. Call build_status(wait_seconds=300) to wait; tell the user they can watch progress in the local UI.",
+      next_step: "Builds take ~5–15 minutes. Call build_status(wait_seconds=45) to wait; tell the user they can watch progress in the local UI.",
     };
   },
 });
@@ -304,7 +304,7 @@ const buildStatus = defineTool({
   name: "build_status",
   title: "Build status (and wait)",
   description:
-    "Gets the status of Codemagic builds (default: the latest ones still running, or the last build). With wait_seconds it polls until the build finishes or the time runs out. When finished, returns install links (also shown as a QR code in the local UI) — give them to the user. On failure, call build_logs.",
+    "Gets the status of Codemagic builds (default: the latest ones still running, or the last build). With wait_seconds it polls until the build finishes or the time runs out — keep it at 45 or less (many agents cut tool calls off after 60s) and call again. When finished, returns install links (also shown as a QR code in the local UI) — give them to the user. On failure, call build_logs.",
   input: {
     build_id: z.string().optional(),
     wait_seconds: z.number().int().min(0).max(600).default(0),
@@ -349,7 +349,7 @@ const buildStatus = defineTool({
       })),
       ui: uiLink,
       next_step: results.some((b) => !TERMINAL.includes(b.status))
-        ? "Still building. Call build_status(wait_seconds=300) again."
+        ? "Still building. Call build_status(wait_seconds=45) again."
         : results.some((b) => b.status !== "finished")
           ? "A build failed. Call build_logs(build_id) to see why, fix it, run check_run, then ship_test_build again."
           : `Done! Give the user the install link${uiLink ? ` and the QR code at ${uiLink}` : ""}. Android: open the link on the phone and allow installing from the browser. iOS simulator builds are for the Simulator only.`,
@@ -430,8 +430,8 @@ const shipReleaseBuild = defineTool({
       steps,
       next_step:
         a.platform === "android"
-          ? "Poll build_status(wait_seconds=300). When finished: if this app has never been uploaded to Google Play, the user must upload this first AAB manually in Play Console (Internal testing → Create release); after that use play_publish."
-          : "Poll build_status(wait_seconds=300). When finished the build appears in TestFlight after Apple processing (asc_testflight_status).",
+          ? "Poll build_status(wait_seconds=45). When finished: if this app has never been uploaded to Google Play, the user must upload this first AAB manually in Play Console (Internal testing → Create release); after that use play_publish."
+          : "Poll build_status(wait_seconds=45). When finished the build appears in TestFlight after Apple processing (asc_testflight_status).",
     };
   },
 });

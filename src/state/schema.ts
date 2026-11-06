@@ -49,6 +49,8 @@ export const CheckRun = z.object({
   passed: z.boolean(),
   items: z.array(CheckItem).default([]),
   screenshots: z.array(z.string()).default([]),
+  /** Hash of the app source when the check ran (see check/fingerprint.ts). */
+  fingerprint: z.string().optional(),
 });
 export type CheckRun = z.infer<typeof CheckRun>;
 
