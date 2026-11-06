@@ -71,8 +71,14 @@ export function textResult(ctx: Ctx, value: unknown, isError = false): ToolResul
   return { content: [{ type: "text", text: redact(text, ctx.secrets.allValues()) }], ...(isError ? { isError } : {}) };
 }
 
-export async function invokeTool(ctx: Ctx, def: ToolDef<any>, rawArgs: Record<string, unknown>): Promise<ToolResult> {
+export async function invokeTool(ctx: Ctx, def: ToolDef<any>, input: Record<string, unknown>): Promise<ToolResult> {
   try {
+    const schema = z.object({ ...def.input, ...(def.supportsDryRun ? { dry_run: z.boolean().optional() } : {}) });
+    const parsed = schema.safeParse(input ?? {});
+    if (!parsed.success) {
+      return textResult(ctx, { error: "Invalid arguments", issues: parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`) }, true);
+    }
+    const rawArgs = parsed.data as Record<string, unknown>;
     if (def.gate) {
       const state = ctx.store.read();
       await def.gate(ctx, rawArgs as any, state);

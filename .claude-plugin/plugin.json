@@ -1,0 +1,11 @@
+{
+  "name": "prompt-to-store",
+  "version": "0.1.0",
+  "description": "From one prompt to Google Play and the App Store — inside your coding agent.",
+  "author": { "name": "Prompt to Store" },
+  "license": "MIT",
+  "keywords": ["mcp", "flutter", "codemagic", "app-store", "google-play", "agent-skills"],
+  "mcpServers": {
+    "prompt-to-store": { "command": "npx", "args": ["-y", "prompt-to-store@latest", "mcp"] }
+  }
+}

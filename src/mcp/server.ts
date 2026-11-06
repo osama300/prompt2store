@@ -1,18 +1,12 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { createCtx, invokeTool, type Ctx, type ToolDef } from "./context.js";
-import { stateGet, planSave, stageUpdate, setupLink } from "./tools/state.js";
-import { checkTools } from "./tools/check.js";
-import { codemagicTools } from "./tools/codemagic.js";
-import { playTools } from "./tools/play.js";
-import { appStoreTools } from "./tools/appstore.js";
+import { createCtx, invokeTool, type Ctx } from "./context.js";
+import { allTools } from "./tools/index.js";
 import { createUiHandle } from "../ui/server.js";
 import { VERSION } from "../version.js";
 
-export function allTools(): ToolDef<any>[] {
-  return [stateGet, planSave, stageUpdate, setupLink, ...checkTools, ...codemagicTools, ...playTools, ...appStoreTools];
-}
+export { allTools };
 
 export const SERVER_INSTRUCTIONS = `prompt-to-store takes a Flutter app from one prompt to a tested build and the stores.
 Pipeline: Plan → Build → Check → Ship → Store. Tools enforce the order: a tool that is called too early returns {blocked, reason, next_step} — do what next_step says.
