@@ -68,7 +68,9 @@ jobs:
         run: node scripts/e2e-flutter.mjs
       - name: Example app (Habit Streaks) passes check_run
         shell: bash
-        run: npx tsx scripts/try-tool.ts examples/habit_streaks check_run '{"build":false}' | tee check.json && grep -q '"passed": true' check.json
+        run: |
+          npx tsx scripts/try-tool.ts examples/habit_streaks check_run '{"build":false}' | tee check.json
+          grep -q '"passed": true' check.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
