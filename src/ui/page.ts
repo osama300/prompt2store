@@ -127,8 +127,10 @@ summary .t{font-weight:600}summary .s{color:var(--muted);flex:1;min-width:0;over
 .pay{margin:10px 0;padding:10px 12px;background:var(--surface2);border-radius:9px;font-family:var(--mono);font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto}
 .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .log{font-family:var(--mono);font-size:12.5px}
-.log .e{display:grid;grid-template-columns:150px 72px 70px minmax(0,1fr);gap:10px;padding:7px 4px;border-top:1px solid var(--border);align-items:baseline}
-.log .e:first-child{border-top:0}.log .tm{color:var(--muted)}.log .src{color:var(--muted)}
+.log .e{display:grid;grid-template-columns:150px 72px 120px minmax(0,1fr);gap:10px;padding:7px 4px;border-top:1px solid var(--border);align-items:baseline}
+.log .e:first-child{border-top:0}.log .tm{color:var(--muted)}.log .src{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* tool/agent text is usually English: lay it out by its own direction inside RTL pages */
+.log .msg,summary .s,.det,.card p,.screen-name,.screen-purpose{unicode-bidi:plaintext;text-align:start}
 .log .lv{font-weight:700;text-transform:uppercase;font-size:11px}
 .lv.info{color:var(--info)}.lv.success{color:var(--ok)}.lv.warn{color:var(--warn)}.lv.error{color:var(--err)}
 .log .msg{overflow-wrap:anywhere;white-space:pre-wrap}
