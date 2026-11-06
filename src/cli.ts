@@ -5,6 +5,7 @@ const HELP = `prompt-to-store ${VERSION}
 🚢 From one prompt to Google Play and the App Store — inside your coding agent.
 
 Usage:
+  npx prompt-to-store                              Guided setup (same as "setup")
   npx prompt-to-store setup [--dry-run] [--yes]   Add the MCP server + skills to your coding agents
   npx prompt-to-store ui [--port 4477]            Open the local companion UI for this project
   npx prompt-to-store mcp                          Run the MCP server (stdio) — used by your agent
@@ -38,6 +39,15 @@ async function main() {
     case "-v":
     case "--version":
       console.log(VERSION);
+      return;
+    case undefined:
+      // `npx prompt-to-store` alone: start the guided setup when a person is at the terminal.
+      if (process.stdin.isTTY && process.stdout.isTTY) {
+        const { runSetup } = await import("./setup/index.js");
+        process.exitCode = await runSetup([]);
+        return;
+      }
+      console.log(HELP);
       return;
     default:
       console.log(HELP);
