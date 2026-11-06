@@ -9,7 +9,7 @@ import { Codemagic, TERMINAL, buildPageUrl, mapStatus, normalizeRepo, toArtifact
 import { codemagicYaml, WF, YAML_MARKER } from "../../services/codemagic-yaml.js";
 import { GitHub, generateDeployKey, parseGithubRemote } from "../../services/github.js";
 import { Git } from "../../lib/git.js";
-import { HttpError, sleep } from "../../lib/http.js";
+import { getFetch, sleep } from "../../lib/http.js";
 import { ensureIosCertificateKey, ensureUploadKey, patchGradleSigning } from "../../services/signing.js";
 import { AppStoreConnect } from "../../services/appstore.js";
 import { GROUPS } from "../../services/codemagic-yaml.js";
@@ -133,34 +133,34 @@ async function prepareRepo(ctx: Ctx, s: State, opts: { commit: boolean; dryRun: 
   let appName = s.connections.codemagic.details.appName ?? "";
   if (appId && s.connections.codemagic.details.repo !== normalizeRepo(remoteUrl)) appId = undefined;
   if (!appId) {
-    const existing = await client.findAppByRepo(remoteUrl);
-    if (existing) {
-      appId = existing._id;
-      appName = existing.appName;
+    // A plain-URL app can only clone public repos. For a private GitHub repo prefer the GitHub
+    // integration or an SSH deploy key.
+    const isPublic = ghRemote ? await githubRepoIsPublic(ghRemote.owner, ghRemote.repo) : true;
+    const usable = (await client.findAppsByRepo(remoteUrl)).filter(
+      (a) => isPublic || a.repository?.provider === "github" || a.repository?.publicSshKey,
+    );
+    if (usable[0]) {
+      appId = usable[0]._id;
+      appName = usable[0].appName;
       steps.push(`Linked existing Codemagic app ${appName}`);
     } else if (opts.dryRun) {
-      steps.push("Would add the repository to Codemagic");
+      steps.push(isPublic ? "Would add the public repository to Codemagic" : "Would add a read-only deploy key and add the private repository to Codemagic");
       appId = "(new)";
     } else {
       let added: { id: string; name: string } | undefined;
-      let firstErr: unknown;
-      try {
+      if (isPublic) {
         added = await client.addApp(remoteUrl.replace(/^https:\/\/[^@/]+@/, "https://"));
-      } catch (e) {
-        firstErr = e;
-      }
-      if (!added && ghRemote && gh) {
-        // Private repo without Codemagic's GitHub integration: read-only deploy key.
+      } else if (ghRemote && gh) {
         const key = generateDeployKey(`prompt-to-store codemagic ${s.project.bundleId}`);
         await new GitHub(gh.token).addDeployKey(ghRemote.owner, ghRemote.repo, "Codemagic (prompt-to-store)", key.publicKeyOpenSsh);
         added = await client.addAppWithSshKey(`git@github.com:${ghRemote.owner}/${ghRemote.repo}.git`, key.privateKeyPem);
         steps.push("Added a read-only deploy key so Codemagic can clone the private repository");
-      }
-      if (!added) {
-        const detail = firstErr instanceof HttpError ? firstErr.body.slice(0, 300) : String(firstErr);
+      } else {
+        const link = await ctx.ui.link("/connect/github").catch(() => undefined);
         throw new GateError(
-          `Codemagic could not access the repository (${detail}).`,
-          "Either connect GitHub in the local UI (setup_link service='github') so a deploy key can be added automatically, or add the repository in Codemagic once (codemagic.io → Add application) and call ship_test_build again.",
+          "The repository is private and Codemagic has no access to it.",
+          `Ask the user to connect GitHub${link ? ` at ${link}` : ""} — a read-only deploy key is then added automatically. (Alternative: in Codemagic, add the app through the GitHub integration.) Then call ship_test_build again.`,
+          link,
         );
       }
       appId = added.id;
@@ -253,8 +253,15 @@ async function refreshBuild(ctx: Ctx, client: Codemagic, b: Build): Promise<Buil
       }),
     );
   }
-  const updated: Build = { ...b, status, artifacts, finishedAt: TERMINAL.includes(status) ? (remote.finished_at ?? nowIso()) : undefined };
+  let error = b.error;
+  if (TERMINAL.includes(status) && status !== "finished" && !error) error = await client.buildMessage(b.id);
+  const updated: Build = { ...b, status, artifacts, error, finishedAt: TERMINAL.includes(status) ? (remote.finished_at ?? nowIso()) : undefined };
   ctx.store.update((st) => {
+    if (error && /Cannot access the repository/i.test(error)) {
+      // The linked Codemagic app cannot clone: forget it so the next ship re-links (deploy key / integration).
+      const { appId: _a, appName: _n, repo: _r, ...rest } = st.connections.codemagic.details;
+      st.connections.codemagic.details = rest;
+    }
     const i = st.builds.findIndex((x) => x.id === b.id);
     if (i >= 0) {
       const changed = st.builds[i].status !== status;
@@ -264,7 +271,7 @@ async function refreshBuild(ctx: Ctx, client: Codemagic, b: Build): Promise<Buil
           at: nowIso(),
           level: status === "finished" ? "success" : TERMINAL.includes(status) ? "error" : "info",
           source: "build",
-          message: `${b.platform} build ${b.id}: ${status}`,
+          message: `${b.platform} build ${b.id}: ${status}${error ? ` — ${error.slice(0, 200)}` : ""}`,
         });
       }
     }
@@ -324,6 +331,7 @@ const buildStatus = defineTool({
         platform: b.platform,
         workflow: b.workflow,
         status: b.status,
+        ...(b.error ? { error: b.error } : {}),
         codemagic_url: b.url,
         install_links: b.artifacts.filter((x) => x.publicUrl).map((x) => ({ file: x.name, url: x.publicUrl })),
       })),
@@ -427,7 +435,7 @@ const buildLogs = defineTool({
     const st = ctx.store.read();
     const id = a.build_id ?? st.builds.at(-1)?.id;
     if (!id) return { message: "No builds yet." };
-    const [build, actions] = await Promise.all([client.getBuild(id), client.buildActions(id)]);
+    const [build, actions, message] = await Promise.all([client.getBuild(id), client.buildActions(id), client.buildMessage(id)]);
     const failed = actions.filter((x) => x.status === "failed");
     const logs: { name: string; tail: string }[] = [];
     for (const art of build.artifacts ?? []) {
@@ -441,11 +449,14 @@ const buildLogs = defineTool({
     return {
       build_id: id,
       status: build.status,
+      message,
       codemagic_url: buildPageUrl(build.app_id, id),
       steps: actions.map((x) => ({ name: x.name, status: x.status })),
       failed_steps: failed.map((x) => ({ name: x.name, script: x.script })),
       log_artifacts: logs,
-      hint: failed.length
+      hint: /Cannot access the repository/i.test(message ?? "")
+        ? "Codemagic cannot clone the repository. Connect GitHub (setup_link service='github') so ship_test_build can add a deploy key, then ship again."
+        : failed.length
         ? "Reproduce the failing step locally if possible (e.g. flutter build apk --release), fix, check_run, then ship again. Full logs are on the Codemagic page."
         : undefined,
     };
@@ -467,6 +478,16 @@ const buildCancel = defineTool({
     return { canceled: a.build_id };
   },
 });
+
+async function githubRepoIsPublic(owner: string, repo: string): Promise<boolean> {
+  // Unauthenticated: 200 = public, 404 = private or missing.
+  try {
+    const res = await getFetch()(`https://api.github.com/repos/${owner}/${repo}`, { headers: { accept: "application/vnd.github+json", "user-agent": "prompt-to-store" } });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
 
 export const codemagicTools: ToolDef<any>[] = [cmConnectStatus, shipTestBuild, shipReleaseBuild, buildStatus, buildLogs, buildCancel];
 export { prepareRepo, refreshBuild, cm };

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "createdAt": "2026-11-06T18:41:38.340Z",
-  "updatedAt": "2026-11-06T18:46:55.714Z",
+  "updatedAt": "2026-11-06T18:49:24.229Z",
   "project": {
     "name": "habit_streaks",
     "displayName": "Habit Streaks",
@@ -55,7 +55,9 @@
       "updatedAt": "2026-11-06T18:45:48.351Z"
     },
     "ship": {
-      "status": "pending"
+      "status": "failed",
+      "updatedAt": "2026-11-06T18:49:24.228Z",
+      "note": "The repository is private and Codemagic has no access to it."
     },
     "store": {
       "status": "pending"
@@ -356,7 +358,32 @@
       ]
     }
   ],
-  "builds": [],
+  "builds": [
+    {
+      "id": "6aee20b924e1ec237556ea54",
+      "provider": "codemagic",
+      "workflow": "p2s-android-test",
+      "platform": "android",
+      "kind": "test",
+      "status": "failed",
+      "startedAt": "2026-11-06T18:47:21.159Z",
+      "finishedAt": "2026-11-06T18:47:21.327000Z",
+      "url": "https://codemagic.io/app/6aee1f3daad3dc6b925261a8/build/6aee20b924e1ec237556ea54",
+      "artifacts": []
+    },
+    {
+      "id": "6aee20b924e1ec237556ea55",
+      "provider": "codemagic",
+      "workflow": "p2s-ios-simulator",
+      "platform": "ios",
+      "kind": "test",
+      "status": "failed",
+      "startedAt": "2026-11-06T18:47:21.295Z",
+      "finishedAt": "2026-11-06T18:47:21.489000Z",
+      "url": "https://codemagic.io/app/6aee1f3daad3dc6b925261a8/build/6aee20b924e1ec237556ea55",
+      "artifacts": []
+    }
+  ],
   "approvals": [],
   "log": [
     {
@@ -562,6 +589,48 @@
       "level": "success",
       "source": "check",
       "message": "All checks passed"
+    },
+    {
+      "at": "2026-11-06T18:47:20.703Z",
+      "level": "info",
+      "source": "stage",
+      "message": "ship → in_progress: Preparing repository"
+    },
+    {
+      "at": "2026-11-06T18:47:21.296Z",
+      "level": "info",
+      "source": "ship",
+      "message": "Started p2s-android-test (6aee20b924e1ec237556ea54), p2s-ios-simulator (6aee20b924e1ec237556ea55)"
+    },
+    {
+      "at": "2026-11-06T18:47:26.956Z",
+      "level": "error",
+      "source": "build",
+      "message": "android build 6aee20b924e1ec237556ea54: failed"
+    },
+    {
+      "at": "2026-11-06T18:47:27.103Z",
+      "level": "error",
+      "source": "build",
+      "message": "ios build 6aee20b924e1ec237556ea55: failed"
+    },
+    {
+      "at": "2026-11-06T18:49:23.915Z",
+      "level": "info",
+      "source": "stage",
+      "message": "ship → in_progress: Preparing repository"
+    },
+    {
+      "at": "2026-11-06T18:49:24.228Z",
+      "level": "error",
+      "source": "stage",
+      "message": "ship → failed: The repository is private and Codemagic has no access to it."
+    },
+    {
+      "at": "2026-11-06T18:49:24.229Z",
+      "level": "warn",
+      "source": "ship_test_build",
+      "message": "Blocked: The repository is private and Codemagic has no access to it."
     }
   ]
 }
