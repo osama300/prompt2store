@@ -6,6 +6,7 @@ export const PAGE_HTML: string = String.raw`<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>prompt-to-store</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20256%20256%22%20role%3D%22img%22%20aria-label%3D%22prompt-to-store%22%3E%20%20%3Cdefs%3E%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%236366F1%22/%3E%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%238B5CF6%22/%3E%20%20%20%20%3C/linearGradient%3E%20%20%20%20%3ClinearGradient%20id%3D%22sea%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2322D3EE%22/%3E%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230EA5E9%22/%3E%20%20%20%20%3C/linearGradient%3E%20%20%3C/defs%3E%20%20%3Crect%20width%3D%22256%22%20height%3D%22256%22%20rx%3D%2258%22%20fill%3D%22url%28%23bg%29%22/%3E%20%20%3C%21--%20prompt%20bubble%20%28tail%20on%20the%20left%2C%20the%20boat%20sails%20out%20of%20it%29%20--%3E%20%20%3Cpath%20d%3D%22M64%2034h128a22%2022%200%200%201%2022%2022v64a22%2022%200%200%201-22%2022H82l-26%2022v-24.6A22%2022%200%200%201%2042%20120V56a22%2022%200%200%201%2022-22z%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.16%22/%3E%20%20%3C%21--%20sails%20--%3E%20%20%3Cpath%20d%3D%22M130%2058v80H84z%22%20fill%3D%22%23fff%22/%3E%20%20%3Cpath%20d%3D%22M138%2072v66h42z%22%20fill%3D%22%23fff%22%20fill-opacity%3D%22.78%22/%3E%20%20%3C%21--%20hull%20--%3E%20%20%3Cpath%20d%3D%22M76%20146h124l-16%2026H92z%22%20fill%3D%22%23fff%22/%3E%20%20%3C%21--%20waves%20--%3E%20%20%3Cpath%20d%3D%22M40%20200c14%200%2014-10%2028-10s14%2010%2028%2010%2014-10%2028-10%2014%2010%2028%2010%2014-10%2028-10%2014%2010%2028%2010%22%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-width%3D%229%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%234f46e5'/%3E%3Cpath d='M9 21l7-12 7 12z' fill='white'/%3E%3C/svg%3E">
 <style>
 :root{
@@ -29,8 +30,8 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .mono{font-family:var(--mono);font-size:12.5px}
 header.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:14px;padding:10px 20px;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
 .brand{display:flex;align-items:center;gap:10px;font-weight:650;letter-spacing:-.01em}
-.logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#6366f1,#4338ca);display:grid;place-items:center;flex:none}
-.logo svg{width:16px;height:16px;fill:#fff}
+.logo{width:30px;height:30px;flex:none}
+.logo svg{width:30px;height:30px;display:block}
 .proj{min-width:0;display:flex;flex-direction:column;line-height:1.2;padding-inline-start:14px;border-inline-start:1px solid var(--border)}
 .proj b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .proj span{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -153,7 +154,7 @@ summary .t{font-weight:600}summary .s{color:var(--muted);flex:1;min-width:0;over
 </head>
 <body>
 <header class="top">
-  <div class="brand"><div class="logo"><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/></svg></div><span>prompt-to-store</span></div>
+  <div class="brand"><div class="logo"><svg viewBox="0 0 256 256" aria-hidden="true"><defs><linearGradient id="p2sbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366F1"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient><linearGradient id="p2ssea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22D3EE"/><stop offset="1" stop-color="#0EA5E9"/></linearGradient></defs><rect width="256" height="256" rx="58" fill="url(#p2sbg)"/><path d="M64 34h128a22 22 0 0 1 22 22v64a22 22 0 0 1-22 22H82l-26 22v-24.6A22 22 0 0 1 42 120V56a22 22 0 0 1 22-22z" fill="#fff" fill-opacity=".16"/><path d="M130 58v80H84z" fill="#fff"/><path d="M138 72v66h42z" fill="#fff" fill-opacity=".78"/><path d="M76 146h124l-16 26H92z" fill="#fff"/><path d="M40 200c14 0 14-10 28-10s14 10 28 10 14-10 28-10 14 10 28 10 14-10 28-10 14 10 28 10" fill="none" stroke="url(#p2ssea)" stroke-width="9" stroke-linecap="round"/></svg></div><span>prompt-to-store</span></div>
   <div class="proj" id="proj"></div>
   <div class="spacer"></div>
   <div class="live" id="live"><span class="dot"></span><span class="lbl" id="livelbl"></span></div>
