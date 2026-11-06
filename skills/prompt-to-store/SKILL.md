@@ -59,9 +59,10 @@ Ask at most one question at a time, and only when the answer would change what g
    - Material 3, light and dark themes, `debugShowCheckedModeBanner: false`
    - empty states
    - no placeholder text and no TODO screens
-4. Make every screen constructible with sample data (a repository interface plus an in-memory implementation). The screenshot test needs this.
-5. Add unit tests for the logic and at least one widget test of the main flow.
-6. Call `stage_update(stage="build", status="done")`.
+4. If the app shows Arabic text, call `font_add(script="arabic")` and set the `fontFamily` it returns in both themes. Without it, Arabic renders as boxes in the screenshots.
+5. Make every screen constructible with sample data (a repository interface plus an in-memory implementation). The screenshot test needs this.
+6. Add unit tests for the logic and at least one widget test of the main flow.
+7. Call `stage_update(stage="build", status="done")`.
 
 ## 3. Check — see the `check` skill
 
