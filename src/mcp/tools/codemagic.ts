@@ -156,6 +156,16 @@ async function prepareRepo(ctx: Ctx, s: State, opts: { commit: boolean; dryRun: 
         added = await client.addAppWithSshKey(`git@github.com:${ghRemote.owner}/${ghRemote.repo}.git`, key.privateKeyPem);
         steps.push("Added a read-only deploy key so Codemagic can clone the private repository");
       } else {
+        // Without GitHub credentials: Codemagic's own GitHub integration may already cover this repo.
+        try {
+          const viaIntegration = await client.addApp(`https://github.com/${ghRemote!.owner}/${ghRemote!.repo}.git`);
+          const app = (await client.listApps()).find((x) => x._id === viaIntegration.id);
+          if (app?.repository?.provider === "github") added = viaIntegration;
+        } catch {
+          /* fall through */
+        }
+      }
+      if (!added) {
         const link = await ctx.ui.link("/connect/github").catch(() => undefined);
         throw new GateError(
           "The repository is private and Codemagic has no access to it.",
