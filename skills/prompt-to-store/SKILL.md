@@ -31,7 +31,7 @@ Copy this list into your progress tracking and tick it off:
 
 - Call `state_get` first in every session. It returns the current stage, the next step and the local UI link. Give the user the link once: "You can watch progress here."
 - Call `env_check`. If Flutter is missing, call `env_check(install_flutter=true)`. Use the Flutter path it returns for every `flutter`/`dart` command, because it may not be on PATH.
-- If `pubspec.yaml` already exists, this is an **existing app**. Skip `flutter create`, describe the app as it is in `plan_save`, and go straight to Check.
+- If `pubspec.yaml` already exists, this is an **existing app**. Skip `app_create`, describe the app as it is in `plan_save`, and go straight to Check.
 
 ## 1. Plan — stop and get approval
 
@@ -52,9 +52,7 @@ Ask at most one question at a time, and only when the answer would change what g
 ## 2. Build
 
 1. Call `stage_update(stage="build", status="in_progress")`.
-2. Create the project with `flutter create --org <reverse domain> --project-name <package_name> --platforms android,ios .`, then set:
-   - the Android `applicationId`/`namespace` and the iOS `PRODUCT_BUNDLE_IDENTIFIER` to exactly the `bundle_id`
-   - the display name: the Android label and the iOS `CFBundleDisplayName`
+2. Call `app_create`. It runs `flutter create` and sets the Android `applicationId`, the iOS bundle id and the display name to the plan exactly. Don't rename ids by hand.
 3. Write a real app, not the counter template:
    - Material 3, light and dark themes, `debugShowCheckedModeBanner: false`
    - empty states
