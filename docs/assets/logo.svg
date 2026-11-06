@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="prompt-to-store">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6366F1"/>
+      <stop offset="1" stop-color="#8B5CF6"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#22D3EE"/>
+      <stop offset="1" stop-color="#0EA5E9"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="58" fill="url(#bg)"/>
+  <!-- prompt bubble (tail on the left, the boat sails out of it) -->
+  <path d="M64 34h128a22 22 0 0 1 22 22v64a22 22 0 0 1-22 22H82l-26 22v-24.6A22 22 0 0 1 42 120V56a22 22 0 0 1 22-22z" fill="#fff" fill-opacity=".16"/>
+  <!-- sails -->
+  <path d="M130 58v80H84z" fill="#fff"/>
+  <path d="M138 72v66h42z" fill="#fff" fill-opacity=".78"/>
+  <!-- hull -->
+  <path d="M76 146h124l-16 26H92z" fill="#fff"/>
+  <!-- waves -->
+  <path d="M40 200c14 0 14-10 28-10s14 10 28 10 14-10 28-10 14 10 28 10 14-10 28-10 14 10 28 10" fill="none" stroke="url(#sea)" stroke-width="9" stroke-linecap="round"/>
+</svg>

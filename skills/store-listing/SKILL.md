@@ -1,6 +1,6 @@
 ---
 name: store-listing
-description: Write and upload Google Play and App Store listings (titles, descriptions, keywords, screenshots) within each store's limits and policies, using prompt-to-store tools (play_listing_*, play_screenshots_upload, asc_metadata_*, asc_screenshots_upload). Use when preparing a store release or when the user asks to edit store text or screenshots.
+description: Writes and uploads Google Play and App Store listings (titles, descriptions, keywords, screenshots) within each store's limits and policies, using prompt-to-store tools (play_listing_*, play_screenshots_upload, asc_metadata_*, asc_screenshots_upload). Use when preparing a store release or when the user asks to change store text or screenshots.
 ---
 
 # Store listing

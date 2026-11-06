@@ -1,0 +1,5 @@
+# Same bytes on every OS: skills/templates are read by agents and compared by tests.
+* text=auto eol=lf
+*.png binary
+*.ttf binary
+*.p12 binary

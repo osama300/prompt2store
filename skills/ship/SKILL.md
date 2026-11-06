@@ -1,6 +1,6 @@
 ---
 name: ship
-description: Ship a Flutter app with prompt-to-store — cloud test builds on Codemagic (installable APK link + QR, iOS simulator build), then release builds for Google Play (AAB) and TestFlight, then publishing with the user's explicit confirmation. Use when the user asks for a test build, to install the app on their phone, or to release/publish/submit.
+description: "Ships a Flutter app with prompt-to-store: cloud test builds on Codemagic (install link + QR code, iOS simulator build), release builds for Google Play (AAB) and TestFlight, and publishing after the user confirms in the local UI. Use when the user asks for a test build, wants to install the app on their phone, or wants to release, publish or submit it."
 ---
 
 # Ship
@@ -12,7 +12,7 @@ description: Ship a Flutter app with prompt-to-store — cloud test builds on Co
    - No git remote → it asks for GitHub: send `setup_link(service="github")`; a **private** repo is created for the user.
    - `platform="ios"` builds for the iOS Simulator only (proves iOS compiles). A build for a real iPhone needs an Apple Developer account → TestFlight below.
    - Use `dry_run=true` if you want to show the user what will happen first.
-3. `build_status(wait_seconds=300)` repeatedly until finished (~5–15 min, first build longer). Meanwhile tell the user it's building and they can watch the UI.
+3. `build_status(wait_seconds=45)` repeatedly until finished (~5–15 min, first build longer). Meanwhile tell the user it's building and they can watch the UI.
 4. Finished → give the install link from `install_links` and mention the QR code in the UI (Builds). On Android the user opens the link on the phone and allows installing from the browser. Testers in `tester_emails` also get an email.
 5. Failed → `build_logs` → fix (see **doctor**) → `check_run` → `ship_test_build`.
 
