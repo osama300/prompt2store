@@ -1,12 +1,22 @@
 name: CI
+
 on:
   push:
   pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
-    runs-on: ubuntu-latest
+    name: Tests · ${{ matrix.os }} · Node ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
         node: [20, 22]
     steps:
       - uses: actions/checkout@v4
@@ -16,4 +26,72 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - run: npm test
+      - name: Unit tests
+        run: npm test
+      - name: MCP server smoke test (stdio, real server + local UI)
+        run: node scripts/smoke-mcp.mjs
+      - name: Installer dry run (fake home)
+        shell: bash
+        run: |
+          export P2S_HOME="$RUNNER_TEMP/fakehome"
+          mkdir -p "$P2S_HOME/.claude" "$P2S_HOME/.cursor" "$P2S_HOME/.codex"
+          echo '{}' > "$P2S_HOME/.claude.json"
+          node dist/cli.js setup --dry-run --agents claude,cursor,codex
+          node dist/cli.js setup --yes --agents claude,cursor,codex
+          node dist/cli.js setup --yes --agents claude,cursor,codex   # idempotent
+          node dist/cli.js setup --uninstall --yes --agents claude,cursor,codex
+
+  flutter:
+    name: Flutter e2e · ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: npm ci
+      - run: npm run build
+      - name: app_create → font_add → check_run (headless screenshots${{ matrix.os == 'ubuntu-latest' && ', APK build' || '' }})
+        shell: bash
+        env:
+          P2S_E2E_BUILD: ${{ matrix.os == 'ubuntu-latest' && '1' || '0' }}
+          P2S_E2E_ARTIFACTS: ${{ runner.temp }}/p2s-artifacts
+        run: node scripts/e2e-flutter.mjs
+      - name: Example app (Habit Streaks) passes check_run
+        shell: bash
+        run: npx tsx scripts/try-tool.ts examples/habit_streaks check_run '{"build":false}' | tee check.json && grep -q '"passed": true' check.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots-${{ matrix.os }}
+          path: ${{ runner.temp }}/p2s-artifacts
+          if-no-files-found: ignore
+
+  flutter-install:
+    name: Flutter install without git · ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Install Flutter from the official archive (the path for users without git)
+        env:
+          P2S_FLUTTER_INSTALL: archive
+        run: node scripts/flutter-install.mjs
