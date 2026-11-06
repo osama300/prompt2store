@@ -10,6 +10,7 @@ export function screenshotTestSource(packageName: string): string {
 // Run by the \`check_run\` tool. Keep the SCREENS list up to date with the app's screens.
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -70,6 +71,7 @@ void main() {
     for (final screen in screens.entries) {
       testWidgets('screenshot \${device.key}/\${screen.key}', (tester) async {
         debugDisableShadows = false;
+        WidgetsApp.debugAllowBannerOverride = false; // no DEBUG ribbon
         final (size, ratio) = device.value;
         tester.view.physicalSize = size * ratio;
         tester.view.devicePixelRatio = ratio;
@@ -81,10 +83,14 @@ void main() {
         } catch (_) {
           await tester.pump(const Duration(seconds: 1)); // endless animations (spinners)
         }
-        await expectLater(
-          find.byKey(const ValueKey('p2s-root')),
-          matchesGoldenFile(Uri.file('\$outDir/\${device.key}/\${screen.key}.png').toString()),
-        );
+        final boundary = tester.renderObject<RenderRepaintBoundary>(find.byKey(const ValueKey('p2s-root')));
+        await tester.runAsync(() async {
+          final image = await boundary.toImage(pixelRatio: ratio);
+          final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
+          final file = File('\$outDir/\${device.key}/\${screen.key}.png');
+          file.parent.createSync(recursive: true);
+          file.writeAsBytesSync(bytes!.buffer.asUint8List());
+        });
         debugDisableShadows = true;
       });
     }
