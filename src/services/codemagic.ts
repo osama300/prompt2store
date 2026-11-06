@@ -88,6 +88,16 @@ export class Codemagic {
     }
   }
 
+  /** Legacy artefact URLs are in the `/artifacts/<secureFilename>` form that public-url needs. */
+  async legacyArtifacts(buildId: string): Promise<Artifact[]> {
+    try {
+      const r = await request<any>(`${LEGACY}/builds/${buildId}`, { headers: this.h(), retries: 1 });
+      return dedupeArtifacts(((r?.build ?? r)?.artefacts ?? []).map((a: any) => ({ name: a.name, url: a.url, type: a.type, size: a.size })));
+    } catch {
+      return [];
+    }
+  }
+
   /** The legacy API exposes the human-readable failure reason (e.g. "Cannot access the repository…"). */
   async buildMessage(buildId: string): Promise<string | undefined> {
     try {
@@ -203,13 +213,24 @@ export function mapStatus(s: string): BuildStatus {
   return "unknown";
 }
 
+/** The same file can match several artifact globs; keep one per name+size. */
+export function dedupeArtifacts(list: Artifact[]): Artifact[] {
+  const seen = new Set<string>();
+  return list.filter((a) => {
+    const k = `${a.name}:${a.size ?? ""}`;
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+}
+
 export function toArtifacts(b: V3Build): Artifact[] {
-  return (b.artifacts ?? []).map((a) => ({
+  return dedupeArtifacts((b.artifacts ?? []).map((a) => ({
     name: a.name,
     url: a.short_lived_download_url ?? a.url ?? "",
     type: a.type,
     size: a.size_in_bytes,
-  }));
+  })));
 }
 
 export function buildPageUrl(appId: string, buildId: string) {

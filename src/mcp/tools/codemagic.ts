@@ -253,6 +253,8 @@ async function refreshBuild(ctx: Ctx, client: Codemagic, b: Build): Promise<Buil
   const status = mapStatus(remote.status);
   let artifacts = toArtifacts(remote);
   if (status === "finished") {
+    const legacy = await client.legacyArtifacts(b.id);
+    if (legacy.length) artifacts = legacy;
     const prev = new Map(b.artifacts.map((x) => [x.name, x.publicUrl]));
     artifacts = await Promise.all(
       artifacts.map(async (art) => {
@@ -328,7 +330,7 @@ const buildStatus = defineTool({
     let results: Build[] = [];
     for (;;) {
       results = [];
-      for (const b of targets) results.push(TERMINAL.includes(b.status) && b.artifacts.length ? b : await refreshBuild(ctx, client, b));
+      for (const b of targets) results.push(TERMINAL.includes(b.status) && (b.status !== "finished" || b.artifacts.some((x) => x.publicUrl)) ? b : await refreshBuild(ctx, client, b));
       if (results.every((b) => TERMINAL.includes(b.status)) || Date.now() >= deadline) break;
       await sleep(Math.min(15_000, Math.max(1000, deadline - Date.now())));
       st = ctx.store.read();
