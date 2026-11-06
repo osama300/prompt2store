@@ -19,7 +19,7 @@ description: "Runs and reads the prompt-to-store Check stage for a Flutter app (
 ## Screenshots without an emulator
 `test/p2s_screenshots_test.dart` renders each entry of its `screens` map at 430×932 @3x = **1290×2796 PNG** (valid App Store 6.7"/6.9" and Google Play phone size) into `.prompt-to-store/checks/screens/phone/`.
 - Add one entry per screen, built directly with sample data, e.g. `'02_detail': () => MaterialApp(theme: appTheme, home: HabitDetailScreen(habit: sampleHabit))`. Prefix names with `01_`, `02_`… to set store order.
-- Real fonts are loaded (Roboto, Material Icons and every font in `pubspec.yaml`). For Arabic or other scripts, bundle a font in the app.
+- Real fonts are loaded (Roboto, Material Icons and every font in `pubspec.yaml`). System fonts are **not** used: Arabic text shows as boxes unless the app bundles a font. Call `font_add(script="arabic")` and set its `fontFamily` in the theme.
 - No network in tests: inject fake repositories; `google_fonts` must be bundled (`GoogleFonts.config.allowRuntimeFetching = false` + asset fonts) or replaced.
 - **Always open the PNGs and look at them.** Yellow/black stripes = overflow. Fix layout bugs before shipping — they are also your store screenshots.
 

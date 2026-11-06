@@ -6,14 +6,16 @@
 
 **From one prompt to Google Play and the App Store — inside your coding agent.**
 
-Plan, build, test and ship a real Flutter app by talking to Claude Code, Codex or Cursor.<br>
-Your code, your accounts, no subscription. Your keys never touch the chat.
+An open-source **plugin for coding agents** (MCP server + skills + a local companion UI).<br>
+Plan, build, test and ship a real Flutter app by talking to your agent. Your code, your accounts, no subscription.
 
 [![CI](https://github.com/taymaapp/prompt2store/actions/workflows/ci.yml/badge.svg)](https://github.com/taymaapp/prompt2store/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-6366f1.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%E2%89%A520-339933.svg?logo=node.js&logoColor=white)](package.json)
 [![MCP](https://img.shields.io/badge/MCP-server-8b5cf6.svg)](https://modelcontextprotocol.io)
 [![Flutter](https://img.shields.io/badge/Flutter-02569B.svg?logo=flutter&logoColor=white)](https://flutter.dev)
+
+**Works with** Claude Code · Codex · Cursor · Gemini CLI · Windsurf <sub>(end-to-end tested on Claude Code; the others are configured by `setup`)</sub>
 
 [Quick start](#-quick-start) · [How it works](#-how-it-works) · [Screenshots](#-the-companion-ui) · [Tools](#-tools) · [Security](#-security) · [FAQ](#-faq) · [العربية](README.ar.md)
 
@@ -119,6 +121,15 @@ An agent built the app below on its own, in about 4.5 minutes, from a single sen
 
 <img src="docs/assets/app-rtl.png" alt="An Arabic right-to-left bill-splitting app built from a one-line prompt" width="100%">
 
+### Built with prompt-to-store
+
+| App | Prompt | Result |
+|---|---|---|
+| [Habit Streaks](examples/habit_streaks) | *"Build a habit tracker with daily streaks and send me a test build."* | 4 screens, 17 tests, Android APK + iOS simulator build on Codemagic |
+| Qassimha (bill splitter, Arabic) | *A one-line request written in Arabic* | RTL app, 7 tests, 5 screenshots: built by an agent unattended in ~4.5 minutes |
+
+<sub>Built something? Open a PR to add it here.</sub>
+
 ## 🖥️ The companion UI
 
 A local page (`npx prompt-to-store ui`, or the link your agent gives you). It has no chat and never runs the agent. It shows you what is happening and asks for your input when it's needed. It comes in English and Arabic, light and dark.
@@ -140,12 +151,12 @@ A local page (`npx prompt-to-store ui`, or the link your agent gives you). It ha
 
 ## 🧰 Tools
 
-26 MCP tools. If a tool is called out of order, it returns `{ "blocked": true, "reason": …, "next_step": … }`, so the agent always knows what to do next. Tools that change something accept `dry_run: true`.
+27 MCP tools. If a tool is called out of order, it returns `{ "blocked": true, "reason": …, "next_step": … }`, so the agent always knows what to do next. Tools that change something accept `dry_run: true`.
 
 | Group | Tools |
 |---|---|
 | **State** | `state_get` · `plan_save` · `stage_update` · `setup_link` |
-| **Environment** | `env_check` (installs Flutter on request) |
+| **Environment** | `env_check` (installs Flutter on request) · `font_add` (bundled Arabic font) |
 | **Check** | `check_run` · `check_results` |
 | **Codemagic** | `cm_connect_status` · `ship_test_build` · `ship_release_build` · `build_status` · `build_logs` · `build_cancel` |
 | **Google Play** | `play_listing_get` · `play_listing_update` · `play_screenshots_upload` · `play_track_status` · `play_publish` · `play_reviews` · `play_reply` |
