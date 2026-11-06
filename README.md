@@ -151,12 +151,12 @@ A local page (`npx prompt-to-store ui`, or the link your agent gives you). It ha
 
 ## 🧰 Tools
 
-27 MCP tools. If a tool is called out of order, it returns `{ "blocked": true, "reason": …, "next_step": … }`, so the agent always knows what to do next. Tools that change something accept `dry_run: true`.
+28 MCP tools. If a tool is called out of order, it returns `{ "blocked": true, "reason": …, "next_step": … }`, so the agent always knows what to do next. Tools that change something accept `dry_run: true`.
 
 | Group | Tools |
 |---|---|
 | **State** | `state_get` · `plan_save` · `stage_update` · `setup_link` |
-| **Environment** | `env_check` (installs Flutter on request) · `font_add` (bundled Arabic font) |
+| **Environment** | `env_check` (installs Flutter on request) · `app_create` (project with the exact store ids) · `font_add` (bundled Arabic font) |
 | **Check** | `check_run` · `check_results` |
 | **Codemagic** | `cm_connect_status` · `ship_test_build` · `ship_release_build` · `build_status` · `build_logs` · `build_cancel` |
 | **Google Play** | `play_listing_get` · `play_listing_update` · `play_screenshots_upload` · `play_track_status` · `play_publish` · `play_reviews` · `play_reply` |
