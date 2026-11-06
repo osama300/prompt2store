@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "createdAt": "2026-11-06T18:41:38.340Z",
-  "updatedAt": "2026-11-06T18:55:50.214Z",
+  "updatedAt": "2026-11-06T18:56:03.929Z",
   "project": {
     "name": "habit_streaks",
     "displayName": "Habit Streaks",
@@ -55,9 +55,7 @@
       "updatedAt": "2026-11-06T18:45:48.351Z"
     },
     "ship": {
-      "status": "failed",
-      "updatedAt": "2026-11-06T18:49:24.228Z",
-      "note": "The repository is private and Codemagic has no access to it."
+      "status": "pending"
     },
     "store": {
       "status": "pending"
@@ -65,19 +63,12 @@
   },
   "connections": {
     "codemagic": {
-      "connected": true,
-      "verifiedAt": "2026-11-06T18:46:55.714Z",
-      "details": {
-        "userId": "69f7774694ec84fff4b7ec5a",
-        "apps": "17"
-      }
+      "connected": false,
+      "details": {}
     },
     "github": {
-      "connected": true,
-      "verifiedAt": "2026-11-06T18:55:50.214Z",
-      "details": {
-        "login": "osama300"
-      }
+      "connected": false,
+      "details": {}
     },
     "play": {
       "connected": false,
@@ -140,7 +131,7 @@
         {
           "name": "build",
           "status": "skipped",
-          "summary": "No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze.",
+          "summary": "No Android SDK locally \u2014 the full build runs on Codemagic. Compile errors were checked by analyze.",
           "details": []
         }
       ],
@@ -213,7 +204,7 @@
         {
           "name": "build",
           "status": "skipped",
-          "summary": "No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze.",
+          "summary": "No Android SDK locally \u2014 the full build runs on Codemagic. Compile errors were checked by analyze.",
           "details": []
         }
       ],
@@ -289,7 +280,7 @@
         {
           "name": "build",
           "status": "skipped",
-          "summary": "No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze.",
+          "summary": "No Android SDK locally \u2014 the full build runs on Codemagic. Compile errors were checked by analyze.",
           "details": []
         }
       ],
@@ -349,7 +340,7 @@
         {
           "name": "build",
           "status": "skipped",
-          "summary": "No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze.",
+          "summary": "No Android SDK locally \u2014 the full build runs on Codemagic. Compile errors were checked by analyze.",
           "details": []
         }
       ],
@@ -361,32 +352,7 @@
       ]
     }
   ],
-  "builds": [
-    {
-      "id": "6aee20b924e1ec237556ea54",
-      "provider": "codemagic",
-      "workflow": "p2s-android-test",
-      "platform": "android",
-      "kind": "test",
-      "status": "failed",
-      "startedAt": "2026-11-06T18:47:21.159Z",
-      "finishedAt": "2026-11-06T18:47:21.327000Z",
-      "url": "https://codemagic.io/app/6aee1f3daad3dc6b925261a8/build/6aee20b924e1ec237556ea54",
-      "artifacts": []
-    },
-    {
-      "id": "6aee20b924e1ec237556ea55",
-      "provider": "codemagic",
-      "workflow": "p2s-ios-simulator",
-      "platform": "ios",
-      "kind": "test",
-      "status": "failed",
-      "startedAt": "2026-11-06T18:47:21.295Z",
-      "finishedAt": "2026-11-06T18:47:21.489000Z",
-      "url": "https://codemagic.io/app/6aee1f3daad3dc6b925261a8/build/6aee20b924e1ec237556ea55",
-      "artifacts": []
-    }
-  ],
+  "builds": [],
   "approvals": [],
   "log": [
     {
@@ -399,7 +365,7 @@
       "at": "2026-11-06T18:41:38.956Z",
       "level": "info",
       "source": "check",
-      "message": "Running checks…"
+      "message": "Running checks\u2026"
     },
     {
       "at": "2026-11-06T18:41:39.655Z",
@@ -441,7 +407,7 @@
       "at": "2026-11-06T18:41:58.677Z",
       "level": "info",
       "source": "check",
-      "message": "SKIPPED build: No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze."
+      "message": "SKIPPED build: No Android SDK locally \u2014 the full build runs on Codemagic. Compile errors were checked by analyze."
     },
     {
       "at": "2026-11-06T18:41:58.679Z",
@@ -453,7 +419,7 @@
       "at": "2026-11-06T18:44:37.847Z",
       "level": "info",
       "source": "check",
-      "message": "Running checks…"
+      "message": "Running checks\u2026"
     },
     {
       "at": "2026-11-06T18:44:38.594Z",
@@ -489,7 +455,7 @@
       "at": "2026-11-06T18:44:55.873Z",
       "level": "info",
       "source": "check",
-      "message": "SKIPPED build: No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze."
+      "message": "SKIPPED build: No Android SDK locally \u2014 the full build runs on Codemagic. Compile errors were checked by analyze."
     },
     {
       "at": "2026-11-06T18:44:55.875Z",
@@ -501,7 +467,7 @@
       "at": "2026-11-06T18:45:05.831Z",
       "level": "info",
       "source": "check",
-      "message": "Running checks…"
+      "message": "Running checks\u2026"
     },
     {
       "at": "2026-11-06T18:45:06.464Z",
@@ -537,7 +503,7 @@
       "at": "2026-11-06T18:45:23.875Z",
       "level": "info",
       "source": "check",
-      "message": "SKIPPED build: No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze."
+      "message": "SKIPPED build: No Android SDK locally \u2014 the full build runs on Codemagic. Compile errors were checked by analyze."
     },
     {
       "at": "2026-11-06T18:45:23.877Z",
@@ -549,7 +515,7 @@
       "at": "2026-11-06T18:45:30.956Z",
       "level": "info",
       "source": "check",
-      "message": "Running checks…"
+      "message": "Running checks\u2026"
     },
     {
       "at": "2026-11-06T18:45:31.701Z",
@@ -585,7 +551,7 @@
       "at": "2026-11-06T18:45:48.348Z",
       "level": "info",
       "source": "check",
-      "message": "SKIPPED build: No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze."
+      "message": "SKIPPED build: No Android SDK locally \u2014 the full build runs on Codemagic. Compile errors were checked by analyze."
     },
     {
       "at": "2026-11-06T18:45:48.351Z",
@@ -597,43 +563,31 @@
       "at": "2026-11-06T18:47:20.703Z",
       "level": "info",
       "source": "stage",
-      "message": "ship → in_progress: Preparing repository"
-    },
-    {
-      "at": "2026-11-06T18:47:21.296Z",
-      "level": "info",
-      "source": "ship",
-      "message": "Started p2s-android-test (6aee20b924e1ec237556ea54), p2s-ios-simulator (6aee20b924e1ec237556ea55)"
-    },
-    {
-      "at": "2026-11-06T18:47:26.956Z",
-      "level": "error",
-      "source": "build",
-      "message": "android build 6aee20b924e1ec237556ea54: failed"
-    },
-    {
-      "at": "2026-11-06T18:47:27.103Z",
-      "level": "error",
-      "source": "build",
-      "message": "ios build 6aee20b924e1ec237556ea55: failed"
+      "message": "ship \u2192 in_progress: Preparing repository"
     },
     {
       "at": "2026-11-06T18:49:23.915Z",
       "level": "info",
       "source": "stage",
-      "message": "ship → in_progress: Preparing repository"
+      "message": "ship \u2192 in_progress: Preparing repository"
     },
     {
       "at": "2026-11-06T18:49:24.228Z",
       "level": "error",
       "source": "stage",
-      "message": "ship → failed: The repository is private and Codemagic has no access to it."
+      "message": "ship \u2192 failed: The repository is private and Codemagic has no access to it."
     },
     {
-      "at": "2026-11-06T18:49:24.229Z",
-      "level": "warn",
-      "source": "ship_test_build",
-      "message": "Blocked: The repository is private and Codemagic has no access to it."
+      "at": "2026-11-06T18:56:02.767Z",
+      "level": "info",
+      "source": "stage",
+      "message": "ship \u2192 in_progress: Preparing repository"
+    },
+    {
+      "at": "2026-11-06T18:56:03.927Z",
+      "level": "error",
+      "source": "stage",
+      "message": "ship \u2192 failed: HTTP 404 from api.github.com/repos/taymaapp/prompt2store/keys: {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/deploy-keys/deploy-keys#create-a-deploy-key\",\"status\":\"404\"}"
     }
   ]
 }
