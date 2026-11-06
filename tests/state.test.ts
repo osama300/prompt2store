@@ -47,12 +47,15 @@ describe("StateStore", () => {
     expect(store.exists()).toBe(true);
   });
 
-  it("init does not overwrite an existing .gitignore", () => {
+  it("init keeps an existing .gitignore and merges the required entries once", () => {
     const dir = path.join(tmp, DIR_NAME);
     fs.mkdirSync(dir);
     fs.writeFileSync(path.join(dir, ".gitignore"), "custom\n");
     new StateStore(tmp).init();
-    expect(fs.readFileSync(path.join(dir, ".gitignore"), "utf8")).toBe("custom\n");
+    new StateStore(tmp).update(() => {});
+    const lines = fs.readFileSync(path.join(dir, ".gitignore"), "utf8").split("\n");
+    expect(lines[0]).toBe("custom");
+    for (const l of ["secrets.json", "ui.json", "keys/"]) expect(lines.filter((x) => x === l)).toHaveLength(1);
   });
 
   it("update persists changes, bumps updatedAt, and leaves no temp or lock files", () => {

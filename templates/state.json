@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-01-01T00:00:00.000Z",
+  "updatedAt": "2026-01-01T00:00:00.000Z",
+  "project": {
+    "name": "",
+    "displayName": "",
+    "bundleId": "",
+    "platforms": [
+      "android",
+      "ios"
+    ],
+    "testerEmails": []
+  },
+  "plan": {
+    "summary": "",
+    "screens": [],
+    "decisions": [],
+    "approved": false
+  },
+  "stages": {
+    "plan": {
+      "status": "pending"
+    },
+    "build": {
+      "status": "pending"
+    },
+    "check": {
+      "status": "pending"
+    },
+    "ship": {
+      "status": "pending"
+    },
+    "store": {
+      "status": "pending"
+    }
+  },
+  "connections": {
+    "codemagic": {
+      "connected": false,
+      "details": {}
+    },
+    "github": {
+      "connected": false,
+      "details": {}
+    },
+    "play": {
+      "connected": false,
+      "details": {}
+    },
+    "appstore": {
+      "connected": false,
+      "details": {}
+    }
+  },
+  "checks": [],
+  "builds": [],
+  "approvals": [],
+  "log": []
+}

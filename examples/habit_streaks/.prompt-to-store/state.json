@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "createdAt": "2026-11-06T18:41:38.340Z",
-  "updatedAt": "2026-11-06T18:49:24.229Z",
+  "updatedAt": "2026-11-06T18:55:50.214Z",
   "project": {
     "name": "habit_streaks",
     "displayName": "Habit Streaks",
@@ -73,8 +73,11 @@
       }
     },
     "github": {
-      "connected": false,
-      "details": {}
+      "connected": true,
+      "verifiedAt": "2026-11-06T18:55:50.214Z",
+      "details": {
+        "login": "osama300"
+      }
     },
     "play": {
       "connected": false,

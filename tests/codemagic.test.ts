@@ -199,6 +199,21 @@ describe("Codemagic client", () => {
     expect(await cm.findAppByRepo("https://github.com/acme/none")).toBeUndefined();
   });
 
+  it("findAppsByRepo orders GitHub-integration apps, then SSH-key apps, then plain-URL apps", async () => {
+    const h = "https://github.com/acme/app";
+    mockFetch(() => ({
+      json: {
+        applications: [
+          { _id: "plain", appName: "p", repository: { htmlUrl: h } },
+          { _id: "ssh", appName: "s", repository: { htmlUrl: h, publicSshKey: "ssh-rsa AAA" } },
+          { _id: "gh", appName: "g", repository: { htmlUrl: h, provider: "github" } },
+        ],
+      },
+    }));
+    const apps = await new Codemagic("t").findAppsByRepo("git@github.com:acme/app.git");
+    expect(apps.map((a) => a._id)).toEqual(["gh", "ssh", "plain"]);
+  });
+
   it("publicUrl POSTs to the legacy artifacts endpoint with an expiry", async () => {
     const calls = mockFetch(() => ({ json: { url: "https://pub/link" } }));
     const before = Math.floor(Date.now() / 1000);
