@@ -12,7 +12,7 @@ describe("skills", () => {
   });
   for (const s of skills) {
     it(`${s}: valid frontmatter, third-person description, size limits`, () => {
-      const text = fs.readFileSync(path.join(dir, s, "SKILL.md"), "utf8");
+      const text = fs.readFileSync(path.join(dir, s, "SKILL.md"), "utf8").replace(/\r\n/g, "\n");
       expect(text.startsWith("---\n")).toBe(true);
       const fm = text.split("---")[1];
       const name = fm.match(/^name: (.+)$/m)?.[1];

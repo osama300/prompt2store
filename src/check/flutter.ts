@@ -2,6 +2,8 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { spawn, spawnSync } from "node:child_process";
+import { Readable } from "node:stream";
+import { pipeline } from "node:stream/promises";
 
 /** Where prompt-to-store installs its own Flutter SDK when the user has none. */
 export const MANAGED_FLUTTER = path.join(os.homedir(), ".prompt-to-store", "flutter");
@@ -128,7 +130,8 @@ async function installFlutterArchive(): Promise<{ ok: boolean; output: string }>
     const file = path.join(path.dirname(MANAGED_FLUTTER), path.basename(url));
     const res = await fetch(url);
     if (!res.ok || !res.body) return { ok: false, output: `Download failed (HTTP ${res.status}) for ${url}` };
-    fs.writeFileSync(file, Buffer.from(await res.arrayBuffer()));
+    // Stream to disk: SDK archives are over 2 GB, more than a single Buffer can hold.
+    await pipeline(Readable.fromWeb(res.body as any), fs.createWriteStream(file));
     const dest = path.dirname(MANAGED_FLUTTER); // archives contain a top-level "flutter/" folder
     const x =
       process.platform === "win32"

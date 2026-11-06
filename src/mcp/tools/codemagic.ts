@@ -60,8 +60,16 @@ async function prepareRepo(ctx: Ctx, s: State, opts: { commit: boolean; dryRun: 
   const steps: string[] = [];
   const git = new Git(ctx.root);
   if (!opts.dryRun && (await git.ensureRepo())) steps.push("Initialized a git repository");
-  const repoTop = (await git.toplevel()) ?? ctx.root;
-  const workingDirectory = path.relative(repoTop, ctx.root).split(path.sep).join("/");
+  // Windows: git prints "D:/a/x" while Node may hold "D:\\a\\x" or an 8.3 short name; compare real paths.
+  const real = (p: string) => {
+    try {
+      return fs.realpathSync.native(path.resolve(p));
+    } catch {
+      return path.resolve(p);
+    }
+  };
+  const repoTop = real((await git.toplevel()) ?? ctx.root);
+  const workingDirectory = path.relative(repoTop, real(ctx.root)).split(path.sep).join("/");
 
   // codemagic.yaml at the repository root
   const yamlPath = path.join(repoTop, "codemagic.yaml");
