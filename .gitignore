@@ -1,0 +1,6 @@
+node_modules/
+dist/
+coverage/
+.prompt-to-store/secrets.json
+*.log
+.DS_Store
