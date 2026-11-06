@@ -55,11 +55,12 @@ export function newId(prefix: string): string {
 
 function ensureDir(p: Paths) {
   fs.mkdirSync(p.dir, { recursive: true });
+  // secrets never get committed; ui.json holds the local UI token/port. Merge into any existing file.
   const gi = path.join(p.dir, ".gitignore");
-  if (!fs.existsSync(gi)) {
-    // secrets never get committed; ui.json holds the local UI token/port.
-    fs.writeFileSync(gi, "secrets.json\nui.json\n*.lock\n");
-  }
+  const cur = fs.existsSync(gi) ? fs.readFileSync(gi, "utf8") : "";
+  const lines = cur.split(/\r?\n/);
+  const missing = ["secrets.json", "ui.json", "*.lock", "keys/", "builds/"].filter((l) => !lines.includes(l));
+  if (missing.length) fs.writeFileSync(gi, `${cur}${cur && !cur.endsWith("\n") ? "\n" : ""}${missing.join("\n")}\n`);
 }
 
 function atomicWrite(file: string, data: string, mode?: number) {

@@ -73,8 +73,6 @@ describe("ensureUploadKey", () => {
     const store = new StateStore(tmp);
     store.init();
     const gi = path.join(store.p.dir, ".gitignore");
-    const before = fs.readFileSync(gi, "utf8");
-    expect(before).not.toContain("keys/");
     ensureUploadKey(store.p.dir, "App");
     ensureUploadKey(store.p.dir, "App");
     ensureIosCertificateKey(store.p.dir);
@@ -82,6 +80,17 @@ describe("ensureUploadKey", () => {
     expect(lines).toContain("secrets.json");
     expect(lines).toContain("ui.json");
     expect(lines.filter((l) => l === "keys/")).toHaveLength(1);
+  }, 60_000);
+
+  // Regression (fixed): keysDir() creates .prompt-to-store/.gitignore containing only "keys/" when the
+  // file is missing, and StateStore.ensureDir() then never adds "secrets.json"/"ui.json" because the file exists.
+  it("does not leave secrets.json un-ignored when the key is created before the state store", () => {
+    const store = new StateStore(tmp);
+    ensureUploadKey(store.p.dir, "App");
+    store.init();
+    const lines = fs.readFileSync(path.join(store.p.dir, ".gitignore"), "utf8").split("\n");
+    expect(lines).toContain("keys/");
+    expect(lines).toContain("secrets.json");
   }, 60_000);
 
   it("truncates a very long common name to 64 chars", () => {

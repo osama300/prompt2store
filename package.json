@@ -16,7 +16,8 @@
     ".codex-plugin",
     "AGENTS.md",
     "README.md",
-    "README.ar.md"
+    "README.ar.md",
+    "LICENSE"
   ],
   "engines": {
     "node": ">=20"
