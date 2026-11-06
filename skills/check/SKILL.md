@@ -1,6 +1,6 @@
 ---
 name: check
-description: How to run and read the prompt-to-store Check stage for a Flutter app (check_run / check_results) — analyzer, tests, headless screenshots of every screen, local build, and optional on-device checks with mobile-mcp. Use before shipping any build or when check_run fails.
+description: "Runs and reads the prompt-to-store Check stage for a Flutter app (check_run, check_results): analyzer, tests, headless screenshots of every screen, a local build, and optional on-device checks with mobile-mcp. Use when about to ship any build, when check_run fails, or when screenshots need fixing."
 ---
 
 # Check

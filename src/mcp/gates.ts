@@ -3,6 +3,7 @@ import path from "node:path";
 import { GateError, type Ctx } from "./context.js";
 import type { ServiceName, State } from "../state/schema.js";
 import { newId, nowIso } from "../state/store.js";
+import { sourceFingerprint } from "../check/fingerprint.js";
 
 /**
  * Stage gates. Each tool calls the gates it needs; a failing gate returns a
@@ -39,7 +40,7 @@ export function lastCheck(s: State) {
   return s.checks.at(-1);
 }
 
-export function requireCheckPassed(_ctx: Ctx, s: State) {
+export function requireCheckPassed(ctx: Ctx, s: State) {
   const c = lastCheck(s);
   if (!c) throw new GateError("No checks have been run yet.", "Call `check_run` and fix any failures.");
   if (!c.passed) {
@@ -48,6 +49,12 @@ export function requireCheckPassed(_ctx: Ctx, s: State) {
   }
   if (s.stages.check.status !== "done") {
     throw new GateError("Code changed after the last check (stage reset).", "Call `check_run` again.");
+  }
+  if (c.fingerprint && fs.existsSync(path.join(ctx.root, "pubspec.yaml")) && sourceFingerprint(ctx.root) !== c.fingerprint) {
+    ctx.store.update((st) => {
+      st.stages.check = { status: "pending", updatedAt: new Date().toISOString(), note: "Code changed after the last check" };
+    });
+    throw new GateError("The app's code changed after the last passing check.", "Call `check_run` again; ship only code that passed the checks.");
   }
 }
 
