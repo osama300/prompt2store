@@ -29,9 +29,17 @@ export class Codemagic {
     return r.applications ?? [];
   }
 
-  async findAppByRepo(repoUrl: string): Promise<LegacyApp | undefined> {
+  /** Apps for this repository, best first: GitHub-integration apps, then SSH-key apps, then plain URL apps. */
+  async findAppsByRepo(repoUrl: string): Promise<LegacyApp[]> {
     const want = normalizeRepo(repoUrl);
-    return (await this.listApps()).find((a) => !a.archived && a.repository && normalizeRepo(a.repository.htmlUrl ?? "") === want);
+    const score = (a: LegacyApp) => (a.repository?.provider === "github" ? 0 : a.repository?.publicSshKey ? 1 : 2);
+    return (await this.listApps())
+      .filter((a) => !a.archived && a.repository && normalizeRepo(a.repository.htmlUrl ?? "") === want)
+      .sort((a, b) => score(a) - score(b));
+  }
+
+  async findAppByRepo(repoUrl: string): Promise<LegacyApp | undefined> {
+    return (await this.findAppsByRepo(repoUrl))[0];
   }
 
   /** Add an app by clone URL (works for public repos and repos covered by the user's GitHub integration). */
@@ -77,6 +85,16 @@ export class Codemagic {
         }
         throw e;
       }
+    }
+  }
+
+  /** The legacy API exposes the human-readable failure reason (e.g. "Cannot access the repository…"). */
+  async buildMessage(buildId: string): Promise<string | undefined> {
+    try {
+      const r = await request<any>(`${LEGACY}/builds/${buildId}`, { headers: this.h(), retries: 0 });
+      return (r?.build ?? r)?.message || undefined;
+    } catch {
+      return undefined;
     }
   }
 
@@ -135,7 +153,7 @@ export interface LegacyApp {
   _id: string;
   appName: string;
   archived?: boolean;
-  repository?: { htmlUrl?: string; defaultBranch?: string; provider?: string };
+  repository?: { htmlUrl?: string; defaultBranch?: string; provider?: string; publicSshKey?: string | null };
 }
 
 export interface V3Build {
