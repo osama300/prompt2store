@@ -1,0 +1,62 @@
+{
+  "name": "prompt-to-store",
+  "version": "0.1.0",
+  "description": "🚢 From one prompt to Google Play and the App Store — inside your coding agent. Open source.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "prompt-to-store": "dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "skills",
+    "templates",
+    ".claude-plugin",
+    ".codex-plugin",
+    "AGENTS.md",
+    "README.md",
+    "README.ar.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/copy-assets.mjs",
+    "dev": "tsx src/cli.ts",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "mcp",
+    "flutter",
+    "codemagic",
+    "app-store",
+    "google-play",
+    "claude-code",
+    "codex",
+    "cursor",
+    "agent-skills"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/taymaapp/prompt2store.git"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "node-forge": "^1.4.3",
+    "qrcode": "^1.5.4",
+    "smol-toml": "^1.9.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "@types/node-forge": "^1.3.14",
+    "@types/qrcode": "^1.5.6",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vitest": "^5.1.0"
+  }
+}

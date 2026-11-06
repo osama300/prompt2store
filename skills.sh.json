@@ -1,0 +1,10 @@
+{
+  "name": "prompt-to-store",
+  "skills": [
+    "skills/prompt-to-store",
+    "skills/check",
+    "skills/ship",
+    "skills/store-listing",
+    "skills/doctor"
+  ]
+}
