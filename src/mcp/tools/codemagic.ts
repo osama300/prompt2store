@@ -10,6 +10,9 @@ import { codemagicYaml, WF, YAML_MARKER } from "../../services/codemagic-yaml.js
 import { GitHub, generateDeployKey, parseGithubRemote } from "../../services/github.js";
 import { Git } from "../../lib/git.js";
 import { HttpError, sleep } from "../../lib/http.js";
+import { ensureIosCertificateKey, ensureUploadKey, patchGradleSigning } from "../../services/signing.js";
+import { AppStoreConnect } from "../../services/appstore.js";
+import { GROUPS } from "../../services/codemagic-yaml.js";
 
 function cm(ctx: Ctx): Codemagic {
   const s = ctx.secrets.get("codemagic");
@@ -334,6 +337,85 @@ const buildStatus = defineTool({
   },
 });
 
+const shipReleaseBuild = defineTool({
+  name: "ship_release_build",
+  title: "Release build for the stores (AAB / TestFlight)",
+  description:
+    "Builds a store-ready release on Codemagic. android: a signed AAB for Google Play — the first time, an upload key is generated locally (backed up in .prompt-to-store/keys/, gitignored), android/app/build.gradle is patched to use it, and the key is stored in a secure Codemagic variable group. ios: a signed IPA uploaded to TestFlight — needs App Store Connect connected and the app record created once in App Store Connect; certificates and profiles are created automatically. Requires a passing check_run and a successful test build. Then poll build_status; publish with play_publish / asc_submit_review.",
+  input: {
+    platform: z.enum(["android", "ios"]),
+    commit: z.boolean().default(true),
+  },
+  supportsDryRun: true,
+  async gate(ctx, a, s) {
+    requireCheckPassed(ctx, s);
+    await requireConnected(ctx, s, "codemagic");
+    if (a.platform === "ios") await requireConnected(ctx, s, "appstore");
+    if (!s.builds.some((b) => b.kind === "test" && b.status === "finished")) {
+      throw new GateError("Ship a successful test build first.", "Call ship_test_build and confirm the app works on the user's phone.");
+    }
+  },
+  async run(ctx, a) {
+    const s = ctx.store.read();
+    const dry = !!a.dry_run;
+    const steps: string[] = [];
+    const vars: Record<string, string> = {};
+    let ascAppId: string | undefined;
+    if (a.platform === "android") {
+      if (!dry) {
+        const { key, created } = ensureUploadKey(ctx.store.p.dir, s.project.displayName || s.project.bundleId);
+        if (created) steps.push(`Generated an Android upload key (SHA-256 ${key.sha256}); backup in .prompt-to-store/keys/ — keep a copy somewhere safe`);
+        const patched = patchGradleSigning(ctx.root);
+        if (patched.changed) steps.push(`Patched ${path.relative(ctx.root, patched.file)} to sign releases with android/key.properties`);
+        vars.P2S_KEYSTORE_B64 = key.p12Base64;
+        vars.P2S_KEYSTORE_PASSWORD = key.password;
+        vars.P2S_KEY_ALIAS = key.alias;
+      } else steps.push("Would generate/reuse the upload key, patch Gradle signing and store it in Codemagic");
+    } else {
+      const f = ctx.secrets.get("appstore")!;
+      const asc = new AppStoreConnect({ issuerId: f.issuerId, keyId: f.keyId, privateKey: f.privateKey });
+      const app = await asc.findAppByBundleId(s.project.bundleId);
+      if (!app) {
+        throw new GateError(
+          `No App Store Connect app with bundle id ${s.project.bundleId}.`,
+          `Ask the user to create it once: App Store Connect → Apps → + → New App → bundle id ${s.project.bundleId} (register it under Certificates, Identifiers & Profiles → Identifiers if it is not listed). Then call ship_release_build again.`,
+        );
+      }
+      ascAppId = app.id;
+      if (!dry) {
+        vars.APP_STORE_CONNECT_ISSUER_ID = f.issuerId;
+        vars.APP_STORE_CONNECT_KEY_IDENTIFIER = f.keyId;
+        vars.APP_STORE_CONNECT_PRIVATE_KEY = f.privateKey;
+        vars.CERTIFICATE_PRIVATE_KEY = ensureIosCertificateKey(ctx.store.p.dir);
+        vars.APP_STORE_APP_ID = app.id;
+      } else steps.push(`Would store App Store Connect credentials in Codemagic for app ${app.name} (${app.id})`);
+    }
+    const prep = await prepareRepo(ctx, s, { commit: a.commit, dryRun: dry });
+    steps.push(...prep.steps);
+    const wf = a.platform === "android" ? WF.androidRelease : WF.iosRelease;
+    if (dry) return { dry_run: true, would: [...steps, `Start Codemagic workflow ${wf} on ${prep.branch}`] };
+    const client = cm(ctx);
+    await client.putVariableGroup(prep.appId, a.platform === "android" ? GROUPS.androidSigning : GROUPS.appStore, vars);
+    steps.push(`Stored signing credentials in the Codemagic variable group ${a.platform === "android" ? GROUPS.androidSigning : GROUPS.appStore} (secure)`);
+    const id = await client.startBuild(prep.appId, wf, prep.branch, ascAppId ? { APP_STORE_APP_ID: ascAppId } : {}, ["prompt-to-store", "release"]);
+    const b: Build = { id, provider: "codemagic", workflow: wf, platform: a.platform, kind: "release", status: "queued", startedAt: nowIso(), url: buildPageUrl(prep.appId, id), artifacts: [] };
+    ctx.store.update((st) => {
+      st.builds.push(b);
+      st.stages.store = { status: "in_progress", updatedAt: nowIso(), note: `Release build (${a.platform})` };
+      st.log.push({ at: nowIso(), level: "info", source: "ship", message: `Started release build ${wf} (${id})` });
+    });
+    return {
+      build_id: id,
+      url: b.url,
+      steps,
+      next_step:
+        a.platform === "android"
+          ? "Poll build_status(wait_seconds=300). When finished: if this app has never been uploaded to Google Play, the user must upload this first AAB manually in Play Console (Internal testing → Create release); after that use play_publish."
+          : "Poll build_status(wait_seconds=300). When finished the build appears in TestFlight after Apple processing (asc_testflight_status).",
+    };
+  },
+});
+
 const buildLogs = defineTool({
   name: "build_logs",
   title: "Build logs (why did it fail?)",
@@ -386,5 +468,5 @@ const buildCancel = defineTool({
   },
 });
 
-export const codemagicTools: ToolDef<any>[] = [cmConnectStatus, shipTestBuild, buildStatus, buildLogs, buildCancel];
+export const codemagicTools: ToolDef<any>[] = [cmConnectStatus, shipTestBuild, shipReleaseBuild, buildStatus, buildLogs, buildCancel];
 export { prepareRepo, refreshBuild, cm };

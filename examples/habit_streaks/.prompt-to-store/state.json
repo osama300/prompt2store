@@ -1,0 +1,567 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-11-06T18:41:38.340Z",
+  "updatedAt": "2026-11-06T18:46:55.714Z",
+  "project": {
+    "name": "habit_streaks",
+    "displayName": "Habit Streaks",
+    "bundleId": "com.prompttostore.example.habitstreaks",
+    "platforms": [
+      "android",
+      "ios"
+    ],
+    "testerEmails": []
+  },
+  "plan": {
+    "summary": "A habit tracker with daily check-offs and streaks, stored locally on the device.",
+    "screens": [
+      {
+        "name": "Today",
+        "purpose": "check off habits"
+      },
+      {
+        "name": "Habit detail",
+        "purpose": "streaks and calendar"
+      },
+      {
+        "name": "Add habit",
+        "purpose": "create/edit"
+      },
+      {
+        "name": "Stats",
+        "purpose": "overview"
+      }
+    ],
+    "decisions": [
+      "Material 3",
+      "shared_preferences storage",
+      "no backend"
+    ],
+    "approved": true,
+    "approvedAt": "2026-11-06T18:41:38.343Z",
+    "approvedVia": "chat"
+  },
+  "stages": {
+    "plan": {
+      "status": "done",
+      "updatedAt": "2026-11-06T18:41:38.344Z"
+    },
+    "build": {
+      "status": "done",
+      "updatedAt": "2026-11-06T18:41:58.679Z"
+    },
+    "check": {
+      "status": "done",
+      "updatedAt": "2026-11-06T18:45:48.351Z"
+    },
+    "ship": {
+      "status": "pending"
+    },
+    "store": {
+      "status": "pending"
+    }
+  },
+  "connections": {
+    "codemagic": {
+      "connected": true,
+      "verifiedAt": "2026-11-06T18:46:55.714Z",
+      "details": {
+        "userId": "69f7774694ec84fff4b7ec5a",
+        "apps": "17"
+      }
+    },
+    "github": {
+      "connected": false,
+      "details": {}
+    },
+    "play": {
+      "connected": false,
+      "details": {}
+    },
+    "appstore": {
+      "connected": false,
+      "details": {}
+    }
+  },
+  "checks": [
+    {
+      "id": "chk_bc10f79990",
+      "startedAt": "2026-11-06T18:41:38.956Z",
+      "finishedAt": "2026-11-06T18:41:58.678Z",
+      "passed": true,
+      "items": [
+        {
+          "name": "dependencies",
+          "status": "passed",
+          "summary": "flutter pub get OK",
+          "details": [],
+          "durationMs": 697
+        },
+        {
+          "name": "analyze",
+          "status": "passed",
+          "summary": "0 errors, 0 warnings, 0 infos",
+          "details": [],
+          "durationMs": 8408
+        },
+        {
+          "name": "format",
+          "status": "passed",
+          "summary": "Code is formatted",
+          "details": [],
+          "durationMs": 66
+        },
+        {
+          "name": "screenshots-setup",
+          "status": "warning",
+          "summary": "Created test/p2s_screenshots_test.dart from the template. Edit its SCREENS list so every screen of the app is captured.",
+          "details": []
+        },
+        {
+          "name": "tests",
+          "status": "warning",
+          "summary": "No tests found in test/. Add at least one widget test for the main flow.",
+          "details": []
+        },
+        {
+          "name": "screenshots",
+          "status": "passed",
+          "summary": "1 screenshots rendered",
+          "details": [
+            ".prompt-to-store/checks/screens/phone/01_home.png"
+          ],
+          "durationMs": 10538
+        },
+        {
+          "name": "build",
+          "status": "skipped",
+          "summary": "No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze.",
+          "details": []
+        }
+      ],
+      "screenshots": [
+        "checks/screens/phone/01_home.png"
+      ]
+    },
+    {
+      "id": "chk_3d12ed4403",
+      "startedAt": "2026-11-06T18:44:37.847Z",
+      "finishedAt": "2026-11-06T18:44:55.874Z",
+      "passed": true,
+      "items": [
+        {
+          "name": "dependencies",
+          "status": "passed",
+          "summary": "flutter pub get OK",
+          "details": [],
+          "durationMs": 744
+        },
+        {
+          "name": "analyze",
+          "status": "passed",
+          "summary": "0 errors, 0 warnings, 0 infos",
+          "details": [],
+          "durationMs": 8038
+        },
+        {
+          "name": "format",
+          "status": "warning",
+          "summary": "Some files are not formatted (run `dart format lib test`)",
+          "details": [
+            "Changed lib/src/models.dart",
+            "Changed lib/src/repository.dart",
+            "Changed lib/src/sample_data.dart",
+            "Changed lib/src/screens/habit_detail_screen.dart",
+            "Changed lib/src/screens/habit_form_screen.dart",
+            "Changed lib/src/screens/stats_screen.dart",
+            "Changed lib/src/screens/today_screen.dart",
+            "Changed lib/src/store.dart",
+            "Changed lib/src/theme.dart",
+            "Changed lib/src/widgets/heatmap.dart",
+            "Changed lib/src/widgets/progress_ring.dart",
+            "Changed test/habit_flow_test.dart",
+            "Changed test/p2s_screenshots_test.dart",
+            "Changed test/streaks_test.dart",
+            "Formatted 18 files (15 changed) in 0.08 seconds."
+          ],
+          "durationMs": 142
+        },
+        {
+          "name": "tests",
+          "status": "passed",
+          "summary": "17 passed, 0 failed, 0 skipped",
+          "details": [],
+          "durationMs": 4521
+        },
+        {
+          "name": "screenshots",
+          "status": "passed",
+          "summary": "4 screenshots rendered",
+          "details": [
+            ".prompt-to-store/checks/screens/phone/01_today.png",
+            ".prompt-to-store/checks/screens/phone/02_habit_detail.png",
+            ".prompt-to-store/checks/screens/phone/03_add_habit.png",
+            ".prompt-to-store/checks/screens/phone/04_stats.png"
+          ],
+          "durationMs": 4563
+        },
+        {
+          "name": "build",
+          "status": "skipped",
+          "summary": "No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze.",
+          "details": []
+        }
+      ],
+      "screenshots": [
+        "checks/screens/phone/01_today.png",
+        "checks/screens/phone/02_habit_detail.png",
+        "checks/screens/phone/03_add_habit.png",
+        "checks/screens/phone/04_stats.png"
+      ]
+    },
+    {
+      "id": "chk_76c81790e4",
+      "startedAt": "2026-11-06T18:45:05.831Z",
+      "finishedAt": "2026-11-06T18:45:23.876Z",
+      "passed": true,
+      "items": [
+        {
+          "name": "dependencies",
+          "status": "passed",
+          "summary": "flutter pub get OK",
+          "details": [],
+          "durationMs": 630
+        },
+        {
+          "name": "analyze",
+          "status": "passed",
+          "summary": "0 errors, 0 warnings, 0 infos",
+          "details": [],
+          "durationMs": 8600
+        },
+        {
+          "name": "format",
+          "status": "warning",
+          "summary": "Some files are not formatted (run `dart format lib test`)",
+          "details": [
+            "Changed lib/src/models.dart",
+            "Changed lib/src/repository.dart",
+            "Changed lib/src/sample_data.dart",
+            "Changed lib/src/screens/habit_detail_screen.dart",
+            "Changed lib/src/screens/habit_form_screen.dart",
+            "Changed lib/src/screens/stats_screen.dart",
+            "Changed lib/src/screens/today_screen.dart",
+            "Changed lib/src/store.dart",
+            "Changed lib/src/theme.dart",
+            "Changed lib/src/widgets/heatmap.dart",
+            "Changed lib/src/widgets/progress_ring.dart",
+            "Changed test/habit_flow_test.dart",
+            "Changed test/p2s_screenshots_test.dart",
+            "Changed test/streaks_test.dart",
+            "Formatted 18 files (15 changed) in 0.08 seconds."
+          ],
+          "durationMs": 157
+        },
+        {
+          "name": "tests",
+          "status": "passed",
+          "summary": "17 passed, 0 failed, 0 skipped",
+          "details": [],
+          "durationMs": 4316
+        },
+        {
+          "name": "screenshots",
+          "status": "passed",
+          "summary": "4 screenshots rendered",
+          "details": [
+            ".prompt-to-store/checks/screens/phone/01_today.png",
+            ".prompt-to-store/checks/screens/phone/02_habit_detail.png",
+            ".prompt-to-store/checks/screens/phone/03_add_habit.png",
+            ".prompt-to-store/checks/screens/phone/04_stats.png"
+          ],
+          "durationMs": 4324
+        },
+        {
+          "name": "build",
+          "status": "skipped",
+          "summary": "No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze.",
+          "details": []
+        }
+      ],
+      "screenshots": [
+        "checks/screens/phone/01_today.png",
+        "checks/screens/phone/02_habit_detail.png",
+        "checks/screens/phone/03_add_habit.png",
+        "checks/screens/phone/04_stats.png"
+      ]
+    },
+    {
+      "id": "chk_c8ed56411c",
+      "startedAt": "2026-11-06T18:45:30.956Z",
+      "finishedAt": "2026-11-06T18:45:48.350Z",
+      "passed": true,
+      "items": [
+        {
+          "name": "dependencies",
+          "status": "passed",
+          "summary": "flutter pub get OK",
+          "details": [],
+          "durationMs": 741
+        },
+        {
+          "name": "analyze",
+          "status": "passed",
+          "summary": "0 errors, 0 warnings, 0 infos",
+          "details": [],
+          "durationMs": 7686
+        },
+        {
+          "name": "format",
+          "status": "passed",
+          "summary": "Code is formatted",
+          "details": [],
+          "durationMs": 165
+        },
+        {
+          "name": "tests",
+          "status": "passed",
+          "summary": "17 passed, 0 failed, 0 skipped",
+          "details": [],
+          "durationMs": 3995
+        },
+        {
+          "name": "screenshots",
+          "status": "passed",
+          "summary": "4 screenshots rendered",
+          "details": [
+            ".prompt-to-store/checks/screens/phone/01_today.png",
+            ".prompt-to-store/checks/screens/phone/02_habit_detail.png",
+            ".prompt-to-store/checks/screens/phone/03_add_habit.png",
+            ".prompt-to-store/checks/screens/phone/04_stats.png"
+          ],
+          "durationMs": 4787
+        },
+        {
+          "name": "build",
+          "status": "skipped",
+          "summary": "No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze.",
+          "details": []
+        }
+      ],
+      "screenshots": [
+        "checks/screens/phone/01_today.png",
+        "checks/screens/phone/02_habit_detail.png",
+        "checks/screens/phone/03_add_habit.png",
+        "checks/screens/phone/04_stats.png"
+      ]
+    }
+  ],
+  "builds": [],
+  "approvals": [],
+  "log": [
+    {
+      "at": "2026-11-06T18:41:38.344Z",
+      "level": "info",
+      "source": "plan",
+      "message": "Plan approved"
+    },
+    {
+      "at": "2026-11-06T18:41:38.956Z",
+      "level": "info",
+      "source": "check",
+      "message": "Running checks…"
+    },
+    {
+      "at": "2026-11-06T18:41:39.655Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED dependencies: flutter pub get OK"
+    },
+    {
+      "at": "2026-11-06T18:41:48.065Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED analyze: 0 errors, 0 warnings, 0 infos"
+    },
+    {
+      "at": "2026-11-06T18:41:48.133Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED format: Code is formatted"
+    },
+    {
+      "at": "2026-11-06T18:41:48.135Z",
+      "level": "warn",
+      "source": "check",
+      "message": "WARNING screenshots-setup: Created test/p2s_screenshots_test.dart from the template. Edit its SCREENS list so every screen of the app is captured."
+    },
+    {
+      "at": "2026-11-06T18:41:48.136Z",
+      "level": "warn",
+      "source": "check",
+      "message": "WARNING tests: No tests found in test/. Add at least one widget test for the main flow."
+    },
+    {
+      "at": "2026-11-06T18:41:58.676Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED screenshots: 1 screenshots rendered"
+    },
+    {
+      "at": "2026-11-06T18:41:58.677Z",
+      "level": "info",
+      "source": "check",
+      "message": "SKIPPED build: No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze."
+    },
+    {
+      "at": "2026-11-06T18:41:58.679Z",
+      "level": "success",
+      "source": "check",
+      "message": "All checks passed"
+    },
+    {
+      "at": "2026-11-06T18:44:37.847Z",
+      "level": "info",
+      "source": "check",
+      "message": "Running checks…"
+    },
+    {
+      "at": "2026-11-06T18:44:38.594Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED dependencies: flutter pub get OK"
+    },
+    {
+      "at": "2026-11-06T18:44:46.636Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED analyze: 0 errors, 0 warnings, 0 infos"
+    },
+    {
+      "at": "2026-11-06T18:44:46.780Z",
+      "level": "warn",
+      "source": "check",
+      "message": "WARNING format: Some files are not formatted (run `dart format lib test`)"
+    },
+    {
+      "at": "2026-11-06T18:44:51.305Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED tests: 17 passed, 0 failed, 0 skipped"
+    },
+    {
+      "at": "2026-11-06T18:44:55.871Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED screenshots: 4 screenshots rendered"
+    },
+    {
+      "at": "2026-11-06T18:44:55.873Z",
+      "level": "info",
+      "source": "check",
+      "message": "SKIPPED build: No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze."
+    },
+    {
+      "at": "2026-11-06T18:44:55.875Z",
+      "level": "success",
+      "source": "check",
+      "message": "All checks passed"
+    },
+    {
+      "at": "2026-11-06T18:45:05.831Z",
+      "level": "info",
+      "source": "check",
+      "message": "Running checks…"
+    },
+    {
+      "at": "2026-11-06T18:45:06.464Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED dependencies: flutter pub get OK"
+    },
+    {
+      "at": "2026-11-06T18:45:15.066Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED analyze: 0 errors, 0 warnings, 0 infos"
+    },
+    {
+      "at": "2026-11-06T18:45:15.225Z",
+      "level": "warn",
+      "source": "check",
+      "message": "WARNING format: Some files are not formatted (run `dart format lib test`)"
+    },
+    {
+      "at": "2026-11-06T18:45:19.544Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED tests: 17 passed, 0 failed, 0 skipped"
+    },
+    {
+      "at": "2026-11-06T18:45:23.872Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED screenshots: 4 screenshots rendered"
+    },
+    {
+      "at": "2026-11-06T18:45:23.875Z",
+      "level": "info",
+      "source": "check",
+      "message": "SKIPPED build: No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze."
+    },
+    {
+      "at": "2026-11-06T18:45:23.877Z",
+      "level": "success",
+      "source": "check",
+      "message": "All checks passed"
+    },
+    {
+      "at": "2026-11-06T18:45:30.956Z",
+      "level": "info",
+      "source": "check",
+      "message": "Running checks…"
+    },
+    {
+      "at": "2026-11-06T18:45:31.701Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED dependencies: flutter pub get OK"
+    },
+    {
+      "at": "2026-11-06T18:45:39.389Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED analyze: 0 errors, 0 warnings, 0 infos"
+    },
+    {
+      "at": "2026-11-06T18:45:39.556Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED format: Code is formatted"
+    },
+    {
+      "at": "2026-11-06T18:45:43.555Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED tests: 17 passed, 0 failed, 0 skipped"
+    },
+    {
+      "at": "2026-11-06T18:45:48.347Z",
+      "level": "info",
+      "source": "check",
+      "message": "PASSED screenshots: 4 screenshots rendered"
+    },
+    {
+      "at": "2026-11-06T18:45:48.348Z",
+      "level": "info",
+      "source": "check",
+      "message": "SKIPPED build: No Android SDK locally — the full build runs on Codemagic. Compile errors were checked by analyze."
+    },
+    {
+      "at": "2026-11-06T18:45:48.351Z",
+      "level": "success",
+      "source": "check",
+      "message": "All checks passed"
+    }
+  ]
+}

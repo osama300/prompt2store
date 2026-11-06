@@ -101,6 +101,29 @@ export class Codemagic {
     return r?.url;
   }
 
+  async listVariableGroups(appId: string): Promise<{ id: string; name: string }[]> {
+    const r = await request<any>(`${V3}/apps/${appId}/variable-groups?page_size=100`, { headers: this.h() });
+    return r?.data ?? [];
+  }
+
+  async deleteVariableGroup(groupId: string): Promise<void> {
+    await request(`${V3}/variable-groups/${groupId}`, { method: "DELETE", headers: this.h(), retries: 0 });
+  }
+
+  /** Create (or replace) an app variable group holding secure variables. */
+  async putVariableGroup(appId: string, name: string, vars: Record<string, string>): Promise<string> {
+    for (const g of await this.listVariableGroups(appId)) if (g.name === name) await this.deleteVariableGroup(g.id);
+    const created = await request<any>(`${V3}/apps/${appId}/variable-groups`, { method: "POST", headers: this.h(), json: { name }, retries: 0 });
+    const id = created?.data?.id ?? created?.id;
+    await request(`${V3}/variable-groups/${id}/variables`, {
+      method: "POST",
+      headers: this.h(),
+      json: { secure: true, variables: Object.entries(vars).map(([k, v]) => ({ name: k, value: v })) },
+      retries: 0,
+    });
+    return id;
+  }
+
   /** Download a text artifact such as a log (authenticated). */
   async downloadText(url: string): Promise<string> {
     const r = await request<any>(url, { headers: { ...this.h(), accept: "*/*" } });
