@@ -36,14 +36,32 @@ export interface RunResult {
   timedOut: boolean;
 }
 
+/**
+ * Quote one argument for cmd.exe. Needed on Windows because .bat/.cmd files (flutter.bat, dart.bat) can only be
+ * started through the shell, and the shell would otherwise split names with spaces or non-ASCII text.
+ */
+export function quoteForCmd(arg: string): string {
+  if (arg === "") return '""';
+  if (!/[\s"&|<>^%!(),;=]/.test(arg)) return arg;
+  return `"${arg.replace(/"/g, '""')}"`;
+}
+
 export function run(cmd: string, args: string[], cwd: string, timeoutMs = 10 * 60_000, env: NodeJS.ProcessEnv = {}): Promise<RunResult> {
   const started = Date.now();
+  const winShell = process.platform === "win32" && /\.(bat|cmd)$/i.test(cmd);
   return new Promise((resolve) => {
-    const child = spawn(cmd, args, {
-      cwd,
-      env: { ...process.env, CI: "true", FLUTTER_SUPPRESS_ANALYTICS: "true", PUB_ENVIRONMENT: "prompt-to-store", ...env },
-      shell: process.platform === "win32",
-    });
+    const child = winShell
+      ? spawn([cmd, ...args].map(quoteForCmd).join(" "), [], {
+          cwd,
+          env: { ...process.env, CI: "true", FLUTTER_SUPPRESS_ANALYTICS: "true", PUB_ENVIRONMENT: "prompt-to-store", ...env },
+          shell: true,
+          windowsHide: true,
+        })
+      : spawn(cmd, args, {
+          cwd,
+          env: { ...process.env, CI: "true", FLUTTER_SUPPRESS_ANALYTICS: "true", PUB_ENVIRONMENT: "prompt-to-store", ...env },
+          windowsHide: true,
+        });
     let stdout = "";
     let stderr = "";
     let timedOut = false;
@@ -65,21 +83,64 @@ export function run(cmd: string, args: string[], cwd: string, timeoutMs = 10 * 6
   });
 }
 
-/** Clone the stable Flutter SDK into ~/.prompt-to-store/flutter (no admin rights needed). */
+/**
+ * Install the stable Flutter SDK into ~/.prompt-to-store/flutter (no admin rights needed).
+ * Uses `git clone` when git exists, otherwise the official release archive (most non-technical
+ * Windows users have no git).
+ */
 export async function installFlutter(): Promise<{ ok: boolean; flutter?: string; output: string }> {
-  if (fs.existsSync(path.join(MANAGED_FLUTTER, "bin", exe("flutter")))) {
-    return { ok: true, flutter: path.join(MANAGED_FLUTTER, "bin", exe("flutter")), output: "already installed" };
-  }
-  const git = spawnSync("git", ["--version"]);
-  if (git.status !== 0) {
-    return { ok: false, output: "git is required to download Flutter. Install git (macOS: `xcode-select --install`; Windows: https://git-scm.com) and retry." };
-  }
-  fs.mkdirSync(path.dirname(MANAGED_FLUTTER), { recursive: true });
-  const r = await run("git", ["clone", "--depth", "1", "-b", "stable", "https://github.com/flutter/flutter.git", MANAGED_FLUTTER], os.homedir(), 20 * 60_000);
-  if (r.code !== 0) return { ok: false, output: r.stderr.slice(-2000) };
   const bin = path.join(MANAGED_FLUTTER, "bin", exe("flutter"));
+  if (fs.existsSync(bin)) return { ok: true, flutter: bin, output: "already installed" };
+  fs.mkdirSync(path.dirname(MANAGED_FLUTTER), { recursive: true });
+  const hasGit = process.env.P2S_FLUTTER_INSTALL !== "archive" && spawnSync("git", ["--version"], { windowsHide: true }).status === 0;
+  if (hasGit) {
+    const r = await run("git", ["clone", "--depth", "1", "-b", "stable", "https://github.com/flutter/flutter.git", MANAGED_FLUTTER], os.homedir(), 20 * 60_000);
+    if (r.code !== 0) return { ok: false, output: r.stderr.slice(-2000) };
+  } else {
+    const r = await installFlutterArchive();
+    if (!r.ok) return r;
+  }
   const v = await run(bin, ["--version"], os.homedir(), 20 * 60_000);
   return { ok: v.code === 0, flutter: bin, output: (v.stdout + v.stderr).slice(-1500) };
+}
+
+const RELEASES = "https://storage.googleapis.com/flutter_infra_release/releases";
+
+export function releaseManifestUrl(platform = process.platform): string {
+  const name = platform === "win32" ? "windows" : platform === "darwin" ? "macos" : "linux";
+  return `${RELEASES}/releases_${name}.json`;
+}
+
+/** Pick the current stable archive for this CPU from a releases_<os>.json manifest. */
+export function pickStableArchive(manifest: any, arch = process.arch): string | undefined {
+  const hash = manifest?.current_release?.stable;
+  const candidates = (manifest?.releases ?? []).filter((r: any) => r.hash === hash);
+  const want = arch === "arm64" ? "arm64" : "x64";
+  const rel = candidates.find((r: any) => (r.dart_sdk_arch ?? "x64") === want) ?? candidates[0];
+  return rel ? `${manifest.base_url ?? RELEASES}/${rel.archive}` : undefined;
+}
+
+async function installFlutterArchive(): Promise<{ ok: boolean; output: string }> {
+  try {
+    const manifest = await (await fetch(releaseManifestUrl())).json();
+    const url = pickStableArchive(manifest);
+    if (!url) return { ok: false, output: "Could not find a stable Flutter release for this computer." };
+    const file = path.join(path.dirname(MANAGED_FLUTTER), path.basename(url));
+    const res = await fetch(url);
+    if (!res.ok || !res.body) return { ok: false, output: `Download failed (HTTP ${res.status}) for ${url}` };
+    fs.writeFileSync(file, Buffer.from(await res.arrayBuffer()));
+    const dest = path.dirname(MANAGED_FLUTTER); // archives contain a top-level "flutter/" folder
+    const x =
+      process.platform === "win32"
+        ? await run("powershell", ["-NoProfile", "-NonInteractive", "-Command", `Expand-Archive -LiteralPath '${file.replace(/'/g, "''")}' -DestinationPath '${dest.replace(/'/g, "''")}' -Force`], dest, 20 * 60_000)
+        : file.endsWith(".zip")
+          ? await run("unzip", ["-q", "-o", file, "-d", dest], dest, 20 * 60_000)
+          : await run("tar", ["-xf", file, "-C", dest], dest, 20 * 60_000);
+    fs.rmSync(file, { force: true });
+    return x.code === 0 ? { ok: true, output: "extracted" } : { ok: false, output: (x.stderr || x.stdout).slice(-2000) };
+  } catch (e) {
+    return { ok: false, output: `Flutter download failed: ${(e as Error).message}` };
+  }
 }
 
 export interface AnalyzerIssue {

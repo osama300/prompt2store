@@ -31,7 +31,7 @@ describe("file backend", () => {
 
   it("writes secrets.json with mode 0600 and round-trips", () => {
     secrets.set("codemagic", { token: "cm-token-abcdef" });
-    expect(fs.statSync(file).mode & 0o777).toBe(0o600);
+    if (process.platform !== "win32") expect(fs.statSync(file).mode & 0o777).toBe(0o600);
     expect(JSON.parse(fs.readFileSync(file, "utf8")).codemagic).toEqual({ token: "cm-token-abcdef" });
     expect(secrets.get("codemagic")).toEqual({ token: "cm-token-abcdef" });
     expect(secrets.has("codemagic")).toBe(true);
@@ -40,7 +40,7 @@ describe("file backend", () => {
   it("keeps mode 0600 on rewrite and leaves no tmp files", () => {
     secrets.set("codemagic", { token: "aaaaaaaa" });
     secrets.set("github", { token: "bbbbbbbb" });
-    expect(fs.statSync(file).mode & 0o777).toBe(0o600);
+    if (process.platform !== "win32") expect(fs.statSync(file).mode & 0o777).toBe(0o600);
     expect(fs.readdirSync(path.dirname(file))).toEqual(["secrets.json"]);
     expect(secrets.get("codemagic")).toEqual({ token: "aaaaaaaa" });
   });

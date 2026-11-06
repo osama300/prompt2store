@@ -62,11 +62,11 @@ describe("ensureUploadKey", () => {
     const { key } = ensureUploadKey(dir, "App");
     const json = path.join(dir, "keys", "android-upload-key.json");
     const p12 = path.join(dir, "keys", "android-upload-key.p12");
-    expect(mode(json)).toBe(0o600);
-    expect(mode(p12)).toBe(0o600);
+    if (process.platform !== "win32") expect(mode(json)).toBe(0o600);
+    if (process.platform !== "win32") expect(mode(p12)).toBe(0o600);
     expect(fs.readFileSync(p12).toString("base64")).toBe(key.p12Base64);
     expect(JSON.parse(fs.readFileSync(json, "utf8")).password).toBe(key.password);
-    expect(mode(path.join(dir, "keys"))).toBe(0o700);
+    if (process.platform !== "win32") expect(mode(path.join(dir, "keys"))).toBe(0o700);
   }, 60_000);
 
   it("adds keys/ to .prompt-to-store/.gitignore once, keeping existing entries", () => {
@@ -106,7 +106,7 @@ describe("ensureIosCertificateKey", () => {
     const dir = path.join(tmp, ".prompt-to-store");
     const a = ensureIosCertificateKey(dir);
     expect(a).toMatch(/^-----BEGIN RSA PRIVATE KEY-----/);
-    expect(mode(path.join(dir, "keys", "ios-certificate-key.pem"))).toBe(0o600);
+    if (process.platform !== "win32") expect(mode(path.join(dir, "keys", "ios-certificate-key.pem"))).toBe(0o600);
     expect(ensureIosCertificateKey(dir)).toBe(a);
     expect(crypto.createPrivateKey(a).asymmetricKeyType).toBe("rsa");
   });
