@@ -252,7 +252,7 @@ export const OutroScene: React.FC = () => {
         <div style={{ ...foot, color: C.muted, fontSize: v ? 32 : 28 }}>
           Open source · Free · Flutter · Works with Claude Code, Codex & Cursor
         </div>
-        <div style={{ ...foot, color: C.cyan, fontSize: v ? 30 : 26, fontFamily: MONO }}>github.com/taymaapp/prompt2store</div>
+        <div style={{ ...foot, color: C.cyan, fontSize: v ? 30 : 26, fontFamily: MONO }}>github.com/osama300/prompt2store</div>
       </AbsoluteFill>
     </AbsoluteFill>
   );

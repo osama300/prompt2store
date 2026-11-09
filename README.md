@@ -9,7 +9,7 @@
 An open-source **plugin for coding agents** (MCP server + skills + a local companion UI).<br>
 Plan, build, test and ship a real Flutter app by talking to your agent. Your code, your accounts, no subscription.
 
-[![CI](https://github.com/taymaapp/prompt2store/actions/workflows/ci.yml/badge.svg)](https://github.com/taymaapp/prompt2store/actions/workflows/ci.yml)
+[![CI](https://github.com/osama300/prompt2store/actions/workflows/ci.yml/badge.svg)](https://github.com/osama300/prompt2store/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-6366f1.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%E2%89%A520-339933.svg?logo=node.js&logoColor=white)](package.json)
 [![MCP](https://img.shields.io/badge/MCP-server-8b5cf6.svg)](https://modelcontextprotocol.io)
@@ -85,7 +85,7 @@ Publish it to Google Play internal testing.
 
 **Claude Code plugin**
 ```text
-/plugin marketplace add taymaapp/prompt2store
+/plugin marketplace add osama300/prompt2store
 /plugin install prompt-to-store@prompt-to-store
 ```
 

@@ -9,7 +9,7 @@
 خطّط وابنِ واختبر وانشر تطبيق Flutter حقيقيًا بالحديث مع Claude Code أو Codex أو Cursor.<br>
 كودك وحساباتك ملكك، بلا اشتراك، ومفاتيحك لا تمر بالمحادثة أبدًا.
 
-[![CI](https://github.com/taymaapp/prompt2store/actions/workflows/ci.yml/badge.svg)](https://github.com/taymaapp/prompt2store/actions/workflows/ci.yml)
+[![CI](https://github.com/osama300/prompt2store/actions/workflows/ci.yml/badge.svg)](https://github.com/osama300/prompt2store/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-6366f1.svg)](LICENSE)
 [![Flutter](https://img.shields.io/badge/Flutter-02569B.svg?logo=flutter&logoColor=white)](https://flutter.dev)
 

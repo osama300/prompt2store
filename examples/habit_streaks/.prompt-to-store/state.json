@@ -582,12 +582,6 @@
       "level": "info",
       "source": "stage",
       "message": "ship \u2192 in_progress: Preparing repository"
-    },
-    {
-      "at": "2026-11-06T18:56:03.927Z",
-      "level": "error",
-      "source": "stage",
-      "message": "ship \u2192 failed: HTTP 404 from api.github.com/repos/taymaapp/prompt2store/keys: {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/deploy-keys/deploy-keys#create-a-deploy-key\",\"status\":\"404\"}"
     }
   ]
 }
