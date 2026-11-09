@@ -388,3 +388,12 @@ describe("github helpers", () => {
     expect(priv.asymmetricKeyDetails?.modulusLength).toBe(4096);
   }, 60_000);
 });
+
+import { canCloneSecurely } from "../src/services/codemagic.js";
+describe("canCloneSecurely (found in a live run)", () => {
+  it("accepts SSH-key apps, which Codemagic lists without the key but with isAuthenticationEnabled", () => {
+    expect(canCloneSecurely({ _id: "1", appName: "a", repository: { provider: "generic", publicSshKey: "", isAuthenticationEnabled: true } })).toBe(true);
+    expect(canCloneSecurely({ _id: "2", appName: "b", repository: { provider: "github" } })).toBe(true);
+    expect(canCloneSecurely({ _id: "3", appName: "c", repository: { provider: "generic", isAuthenticationEnabled: false } })).toBe(false);
+  });
+});
