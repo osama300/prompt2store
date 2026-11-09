@@ -1,0 +1,885 @@
+{
+ "prompt": "Build a habit tracker with daily streaks and send me a test build.",
+ "chat": [
+  {
+   "t": 0.5,
+   "kind": "text",
+   "text": "On it \u2014 planning a habit tracker with daily streaks."
+  },
+  {
+   "t": 8.823,
+   "kind": "tool",
+   "text": "state_get"
+  },
+  {
+   "t": 8.865,
+   "kind": "tool",
+   "text": "env_check \u00b7 Flutter found"
+  },
+  {
+   "t": 21.42,
+   "kind": "tool",
+   "text": "plan_save \u00b7 4 screens"
+  },
+  {
+   "t": 22.654,
+   "kind": "tool",
+   "text": "stage_update \u00b7 build"
+  },
+  {
+   "t": 22.659,
+   "kind": "tool",
+   "text": "app_create \u00b7 com.\u2026habitstreaks"
+  },
+  {
+   "t": 72.668,
+   "kind": "tool",
+   "text": "write lib/src/habit.dart"
+  },
+  {
+   "t": 74.936,
+   "kind": "tool",
+   "text": "write lib/src/repository.dart"
+  },
+  {
+   "t": 77.301,
+   "kind": "tool",
+   "text": "write lib/src/store.dart"
+  },
+  {
+   "t": 79.067,
+   "kind": "tool",
+   "text": "write lib/main.dart"
+  },
+  {
+   "t": 93.569,
+   "kind": "tool",
+   "text": "write lib/src/screens.dart"
+  },
+  {
+   "t": 97.475,
+   "kind": "tool",
+   "text": "write test/widget_test.dart"
+  },
+  {
+   "t": 102.273,
+   "kind": "tool",
+   "text": "stage_update \u00b7 build"
+  },
+  {
+   "t": 102.309,
+   "kind": "tool",
+   "text": "check_run"
+  },
+  {
+   "t": 154.759,
+   "kind": "tool",
+   "text": "edit test/p2s_screenshots_test.dart"
+  },
+  {
+   "t": 155.824,
+   "kind": "tool",
+   "text": "check_run"
+  },
+  {
+   "t": 179.865,
+   "kind": "tool",
+   "text": "ship_test_build"
+  }
+ ],
+ "checkStartSec": 102.309,
+ "pathFrames": [
+  {
+   "t": 1.4,
+   "src": "frames/path/00001.4.jpg"
+  },
+  {
+   "t": 4.5,
+   "src": "frames/path/00004.5.jpg"
+  },
+  {
+   "t": 7.7,
+   "src": "frames/path/00007.7.jpg"
+  },
+  {
+   "t": 10.8,
+   "src": "frames/path/00010.8.jpg"
+  },
+  {
+   "t": 13.9,
+   "src": "frames/path/00013.9.jpg"
+  },
+  {
+   "t": 17.7,
+   "src": "frames/path/00017.7.jpg"
+  },
+  {
+   "t": 21.5,
+   "src": "frames/path/00021.5.jpg"
+  },
+  {
+   "t": 24.6,
+   "src": "frames/path/00024.6.jpg"
+  },
+  {
+   "t": 27.7,
+   "src": "frames/path/00027.7.jpg"
+  },
+  {
+   "t": 31.3,
+   "src": "frames/path/00031.3.jpg"
+  },
+  {
+   "t": 34.9,
+   "src": "frames/path/00034.9.jpg"
+  },
+  {
+   "t": 38.2,
+   "src": "frames/path/00038.2.jpg"
+  },
+  {
+   "t": 41.4,
+   "src": "frames/path/00041.4.jpg"
+  },
+  {
+   "t": 44.5,
+   "src": "frames/path/00044.5.jpg"
+  },
+  {
+   "t": 47.6,
+   "src": "frames/path/00047.6.jpg"
+  },
+  {
+   "t": 50.8,
+   "src": "frames/path/00050.8.jpg"
+  },
+  {
+   "t": 53.9,
+   "src": "frames/path/00053.9.jpg"
+  },
+  {
+   "t": 57.0,
+   "src": "frames/path/00057.0.jpg"
+  },
+  {
+   "t": 60.1,
+   "src": "frames/path/00060.1.jpg"
+  },
+  {
+   "t": 63.2,
+   "src": "frames/path/00063.2.jpg"
+  },
+  {
+   "t": 66.3,
+   "src": "frames/path/00066.3.jpg"
+  },
+  {
+   "t": 69.4,
+   "src": "frames/path/00069.4.jpg"
+  },
+  {
+   "t": 72.5,
+   "src": "frames/path/00072.5.jpg"
+  },
+  {
+   "t": 75.7,
+   "src": "frames/path/00075.7.jpg"
+  },
+  {
+   "t": 78.9,
+   "src": "frames/path/00078.9.jpg"
+  },
+  {
+   "t": 82.0,
+   "src": "frames/path/00082.0.jpg"
+  },
+  {
+   "t": 85.1,
+   "src": "frames/path/00085.1.jpg"
+  },
+  {
+   "t": 88.5,
+   "src": "frames/path/00088.5.jpg"
+  },
+  {
+   "t": 91.6,
+   "src": "frames/path/00091.6.jpg"
+  },
+  {
+   "t": 94.7,
+   "src": "frames/path/00094.7.jpg"
+  },
+  {
+   "t": 97.8,
+   "src": "frames/path/00097.8.jpg"
+  },
+  {
+   "t": 101.0,
+   "src": "frames/path/00101.0.jpg"
+  },
+  {
+   "t": 104.1,
+   "src": "frames/path/00104.1.jpg"
+  },
+  {
+   "t": 107.2,
+   "src": "frames/path/00107.2.jpg"
+  }
+ ],
+ "buildFrames": [
+  {
+   "t": 269.4,
+   "src": "frames/builds/00269.4.jpg"
+  },
+  {
+   "t": 272.6,
+   "src": "frames/builds/00272.6.jpg"
+  },
+  {
+   "t": 275.8,
+   "src": "frames/builds/00275.8.jpg"
+  },
+  {
+   "t": 279.0,
+   "src": "frames/builds/00279.0.jpg"
+  },
+  {
+   "t": 282.2,
+   "src": "frames/builds/00282.2.jpg"
+  },
+  {
+   "t": 285.4,
+   "src": "frames/builds/00285.4.jpg"
+  },
+  {
+   "t": 288.6,
+   "src": "frames/builds/00288.6.jpg"
+  },
+  {
+   "t": 291.7,
+   "src": "frames/builds/00291.7.jpg"
+  },
+  {
+   "t": 294.9,
+   "src": "frames/builds/00294.9.jpg"
+  },
+  {
+   "t": 298.1,
+   "src": "frames/builds/00298.1.jpg"
+  },
+  {
+   "t": 301.3,
+   "src": "frames/builds/00301.3.jpg"
+  },
+  {
+   "t": 304.5,
+   "src": "frames/builds/00304.5.jpg"
+  },
+  {
+   "t": 307.7,
+   "src": "frames/builds/00307.7.jpg"
+  },
+  {
+   "t": 310.8,
+   "src": "frames/builds/00310.8.jpg"
+  },
+  {
+   "t": 314.0,
+   "src": "frames/builds/00314.0.jpg"
+  },
+  {
+   "t": 317.2,
+   "src": "frames/builds/00317.2.jpg"
+  },
+  {
+   "t": 320.4,
+   "src": "frames/builds/00320.4.jpg"
+  },
+  {
+   "t": 323.6,
+   "src": "frames/builds/00323.6.jpg"
+  },
+  {
+   "t": 326.9,
+   "src": "frames/builds/00326.9.jpg"
+  },
+  {
+   "t": 330.1,
+   "src": "frames/builds/00330.1.jpg"
+  },
+  {
+   "t": 333.3,
+   "src": "frames/builds/00333.3.jpg"
+  },
+  {
+   "t": 336.5,
+   "src": "frames/builds/00336.5.jpg"
+  },
+  {
+   "t": 339.7,
+   "src": "frames/builds/00339.7.jpg"
+  },
+  {
+   "t": 342.9,
+   "src": "frames/builds/00342.9.jpg"
+  },
+  {
+   "t": 346.0,
+   "src": "frames/builds/00346.0.jpg"
+  },
+  {
+   "t": 349.2,
+   "src": "frames/builds/00349.2.jpg"
+  },
+  {
+   "t": 352.4,
+   "src": "frames/builds/00352.4.jpg"
+  },
+  {
+   "t": 355.6,
+   "src": "frames/builds/00355.6.jpg"
+  },
+  {
+   "t": 358.8,
+   "src": "frames/builds/00358.8.jpg"
+  },
+  {
+   "t": 362.1,
+   "src": "frames/builds/00362.1.jpg"
+  },
+  {
+   "t": 365.4,
+   "src": "frames/builds/00365.4.jpg"
+  },
+  {
+   "t": 368.6,
+   "src": "frames/builds/00368.6.jpg"
+  },
+  {
+   "t": 371.8,
+   "src": "frames/builds/00371.8.jpg"
+  },
+  {
+   "t": 375.0,
+   "src": "frames/builds/00375.0.jpg"
+  },
+  {
+   "t": 378.1,
+   "src": "frames/builds/00378.1.jpg"
+  },
+  {
+   "t": 381.3,
+   "src": "frames/builds/00381.3.jpg"
+  },
+  {
+   "t": 384.5,
+   "src": "frames/builds/00384.5.jpg"
+  },
+  {
+   "t": 387.7,
+   "src": "frames/builds/00387.7.jpg"
+  },
+  {
+   "t": 391.0,
+   "src": "frames/builds/00391.0.jpg"
+  },
+  {
+   "t": 394.2,
+   "src": "frames/builds/00394.2.jpg"
+  },
+  {
+   "t": 397.4,
+   "src": "frames/builds/00397.4.jpg"
+  },
+  {
+   "t": 400.6,
+   "src": "frames/builds/00400.6.jpg"
+  },
+  {
+   "t": 403.8,
+   "src": "frames/builds/00403.8.jpg"
+  },
+  {
+   "t": 407.0,
+   "src": "frames/builds/00407.0.jpg"
+  },
+  {
+   "t": 410.1,
+   "src": "frames/builds/00410.1.jpg"
+  },
+  {
+   "t": 413.3,
+   "src": "frames/builds/00413.3.jpg"
+  },
+  {
+   "t": 416.5,
+   "src": "frames/builds/00416.5.jpg"
+  },
+  {
+   "t": 419.7,
+   "src": "frames/builds/00419.7.jpg"
+  },
+  {
+   "t": 422.8,
+   "src": "frames/builds/00422.8.jpg"
+  },
+  {
+   "t": 426.0,
+   "src": "frames/builds/00426.0.jpg"
+  },
+  {
+   "t": 429.2,
+   "src": "frames/builds/00429.2.jpg"
+  },
+  {
+   "t": 432.4,
+   "src": "frames/builds/00432.4.jpg"
+  },
+  {
+   "t": 435.6,
+   "src": "frames/builds/00435.6.jpg"
+  },
+  {
+   "t": 438.8,
+   "src": "frames/builds/00438.8.jpg"
+  },
+  {
+   "t": 442.0,
+   "src": "frames/builds/00442.0.jpg"
+  },
+  {
+   "t": 445.2,
+   "src": "frames/builds/00445.2.jpg"
+  },
+  {
+   "t": 448.4,
+   "src": "frames/builds/00448.4.jpg"
+  },
+  {
+   "t": 451.6,
+   "src": "frames/builds/00451.6.jpg"
+  },
+  {
+   "t": 454.8,
+   "src": "frames/builds/00454.8.jpg"
+  },
+  {
+   "t": 458.1,
+   "src": "frames/builds/00458.1.jpg"
+  },
+  {
+   "t": 461.3,
+   "src": "frames/builds/00461.3.jpg"
+  },
+  {
+   "t": 464.5,
+   "src": "frames/builds/00464.5.jpg"
+  },
+  {
+   "t": 467.7,
+   "src": "frames/builds/00467.7.jpg"
+  },
+  {
+   "t": 470.9,
+   "src": "frames/builds/00470.9.jpg"
+  },
+  {
+   "t": 474.1,
+   "src": "frames/builds/00474.1.jpg"
+  },
+  {
+   "t": 477.3,
+   "src": "frames/builds/00477.3.jpg"
+  },
+  {
+   "t": 480.4,
+   "src": "frames/builds/00480.4.jpg"
+  },
+  {
+   "t": 483.6,
+   "src": "frames/builds/00483.6.jpg"
+  },
+  {
+   "t": 486.8,
+   "src": "frames/builds/00486.8.jpg"
+  },
+  {
+   "t": 490.1,
+   "src": "frames/builds/00490.1.jpg"
+  },
+  {
+   "t": 493.2,
+   "src": "frames/builds/00493.2.jpg"
+  },
+  {
+   "t": 496.4,
+   "src": "frames/builds/00496.4.jpg"
+  },
+  {
+   "t": 499.6,
+   "src": "frames/builds/00499.6.jpg"
+  },
+  {
+   "t": 502.8,
+   "src": "frames/builds/00502.8.jpg"
+  },
+  {
+   "t": 506.0,
+   "src": "frames/builds/00506.0.jpg"
+  },
+  {
+   "t": 509.2,
+   "src": "frames/builds/00509.2.jpg"
+  },
+  {
+   "t": 512.3,
+   "src": "frames/builds/00512.3.jpg"
+  },
+  {
+   "t": 515.5,
+   "src": "frames/builds/00515.5.jpg"
+  },
+  {
+   "t": 518.8,
+   "src": "frames/builds/00518.8.jpg"
+  },
+  {
+   "t": 522.0,
+   "src": "frames/builds/00522.0.jpg"
+  },
+  {
+   "t": 525.1,
+   "src": "frames/builds/00525.1.jpg"
+  },
+  {
+   "t": 528.3,
+   "src": "frames/builds/00528.3.jpg"
+  },
+  {
+   "t": 531.5,
+   "src": "frames/builds/00531.5.jpg"
+  },
+  {
+   "t": 534.7,
+   "src": "frames/builds/00534.7.jpg"
+  },
+  {
+   "t": 537.9,
+   "src": "frames/builds/00537.9.jpg"
+  },
+  {
+   "t": 541.1,
+   "src": "frames/builds/00541.1.jpg"
+  },
+  {
+   "t": 544.4,
+   "src": "frames/builds/00544.4.jpg"
+  },
+  {
+   "t": 547.5,
+   "src": "frames/builds/00547.5.jpg"
+  },
+  {
+   "t": 550.7,
+   "src": "frames/builds/00550.7.jpg"
+  },
+  {
+   "t": 553.9,
+   "src": "frames/builds/00553.9.jpg"
+  },
+  {
+   "t": 557.1,
+   "src": "frames/builds/00557.1.jpg"
+  },
+  {
+   "t": 560.3,
+   "src": "frames/builds/00560.3.jpg"
+  },
+  {
+   "t": 563.4,
+   "src": "frames/builds/00563.4.jpg"
+  },
+  {
+   "t": 566.5,
+   "src": "frames/builds/00566.5.jpg"
+  },
+  {
+   "t": 569.7,
+   "src": "frames/builds/00569.7.jpg"
+  },
+  {
+   "t": 572.9,
+   "src": "frames/builds/00572.9.jpg"
+  },
+  {
+   "t": 576.1,
+   "src": "frames/builds/00576.1.jpg"
+  },
+  {
+   "t": 579.3,
+   "src": "frames/builds/00579.3.jpg"
+  },
+  {
+   "t": 582.5,
+   "src": "frames/builds/00582.5.jpg"
+  },
+  {
+   "t": 585.6,
+   "src": "frames/builds/00585.6.jpg"
+  },
+  {
+   "t": 588.8,
+   "src": "frames/builds/00588.8.jpg"
+  },
+  {
+   "t": 592.0,
+   "src": "frames/builds/00592.0.jpg"
+  },
+  {
+   "t": 595.2,
+   "src": "frames/builds/00595.2.jpg"
+  },
+  {
+   "t": 598.4,
+   "src": "frames/builds/00598.4.jpg"
+  },
+  {
+   "t": 601.6,
+   "src": "frames/builds/00601.6.jpg"
+  },
+  {
+   "t": 604.8,
+   "src": "frames/builds/00604.8.jpg"
+  },
+  {
+   "t": 608.0,
+   "src": "frames/builds/00608.0.jpg"
+  },
+  {
+   "t": 611.2,
+   "src": "frames/builds/00611.2.jpg"
+  },
+  {
+   "t": 614.4,
+   "src": "frames/builds/00614.4.jpg"
+  },
+  {
+   "t": 617.5,
+   "src": "frames/builds/00617.5.jpg"
+  },
+  {
+   "t": 620.7,
+   "src": "frames/builds/00620.7.jpg"
+  },
+  {
+   "t": 623.9,
+   "src": "frames/builds/00623.9.jpg"
+  },
+  {
+   "t": 627.1,
+   "src": "frames/builds/00627.1.jpg"
+  },
+  {
+   "t": 630.4,
+   "src": "frames/builds/00630.4.jpg"
+  },
+  {
+   "t": 633.5,
+   "src": "frames/builds/00633.5.jpg"
+  },
+  {
+   "t": 636.8,
+   "src": "frames/builds/00636.8.jpg"
+  },
+  {
+   "t": 640.0,
+   "src": "frames/builds/00640.0.jpg"
+  },
+  {
+   "t": 643.1,
+   "src": "frames/builds/00643.1.jpg"
+  },
+  {
+   "t": 646.3,
+   "src": "frames/builds/00646.3.jpg"
+  },
+  {
+   "t": 649.5,
+   "src": "frames/builds/00649.5.jpg"
+  },
+  {
+   "t": 652.7,
+   "src": "frames/builds/00652.7.jpg"
+  },
+  {
+   "t": 655.9,
+   "src": "frames/builds/00655.9.jpg"
+  },
+  {
+   "t": 659.1,
+   "src": "frames/builds/00659.1.jpg"
+  },
+  {
+   "t": 662.3,
+   "src": "frames/builds/00662.3.jpg"
+  },
+  {
+   "t": 665.5,
+   "src": "frames/builds/00665.5.jpg"
+  },
+  {
+   "t": 668.7,
+   "src": "frames/builds/00668.7.jpg"
+  },
+  {
+   "t": 671.9,
+   "src": "frames/builds/00671.9.jpg"
+  },
+  {
+   "t": 675.0,
+   "src": "frames/builds/00675.0.jpg"
+  },
+  {
+   "t": 678.2,
+   "src": "frames/builds/00678.2.jpg"
+  },
+  {
+   "t": 681.4,
+   "src": "frames/builds/00681.4.jpg"
+  },
+  {
+   "t": 684.5,
+   "src": "frames/builds/00684.5.jpg"
+  },
+  {
+   "t": 687.7,
+   "src": "frames/builds/00687.7.jpg"
+  },
+  {
+   "t": 690.9,
+   "src": "frames/builds/00690.9.jpg"
+  },
+  {
+   "t": 694.1,
+   "src": "frames/builds/00694.1.jpg"
+  },
+  {
+   "t": 697.3,
+   "src": "frames/builds/00697.3.jpg"
+  },
+  {
+   "t": 700.5,
+   "src": "frames/builds/00700.5.jpg"
+  },
+  {
+   "t": 703.7,
+   "src": "frames/builds/00703.7.jpg"
+  },
+  {
+   "t": 706.9,
+   "src": "frames/builds/00706.9.jpg"
+  },
+  {
+   "t": 710.1,
+   "src": "frames/builds/00710.1.jpg"
+  },
+  {
+   "t": 713.2,
+   "src": "frames/builds/00713.2.jpg"
+  },
+  {
+   "t": 716.4,
+   "src": "frames/builds/00716.4.jpg"
+  },
+  {
+   "t": 719.7,
+   "src": "frames/builds/00719.7.jpg"
+  },
+  {
+   "t": 722.8,
+   "src": "frames/builds/00722.8.jpg"
+  },
+  {
+   "t": 726.0,
+   "src": "frames/builds/00726.0.jpg"
+  },
+  {
+   "t": 729.2,
+   "src": "frames/builds/00729.2.jpg"
+  },
+  {
+   "t": 732.4,
+   "src": "frames/builds/00732.4.jpg"
+  },
+  {
+   "t": 735.6,
+   "src": "frames/builds/00735.6.jpg"
+  },
+  {
+   "t": 738.8,
+   "src": "frames/builds/00738.8.jpg"
+  },
+  {
+   "t": 741.9,
+   "src": "frames/builds/00741.9.jpg"
+  },
+  {
+   "t": 745.0,
+   "src": "frames/builds/00745.0.jpg"
+  },
+  {
+   "t": 748.2,
+   "src": "frames/builds/00748.2.jpg"
+  },
+  {
+   "t": 751.3,
+   "src": "frames/builds/00751.3.jpg"
+  },
+  {
+   "t": 754.5,
+   "src": "frames/builds/00754.5.jpg"
+  },
+  {
+   "t": 757.7,
+   "src": "frames/builds/00757.7.jpg"
+  },
+  {
+   "t": 760.8,
+   "src": "frames/builds/00760.8.jpg"
+  },
+  {
+   "t": 763.9,
+   "src": "frames/builds/00763.9.jpg"
+  },
+  {
+   "t": 767.1,
+   "src": "frames/builds/00767.1.jpg"
+  },
+  {
+   "t": 770.3,
+   "src": "frames/builds/00770.3.jpg"
+  },
+  {
+   "t": 773.4,
+   "src": "frames/builds/00773.4.jpg"
+  }
+ ],
+ "shipStartSec": 277.5260000228882,
+ "installSec": 743.6500000953674,
+ "buildSecs": 466.12400007247925,
+ "agentSecs": 190.307,
+ "totalMinutes": 11,
+ "checkBadges": [
+  "0 analyzer errors",
+  "5 passed",
+  "4 screens rendered"
+ ],
+ "screens": [
+  "screens/01_today.png",
+  "screens/02_empty.png",
+  "screens/03_add.png",
+  "screens/04_detail.png"
+ ],
+ "qr": "qr.png",
+ "apkName": "app-release.apk \u00b7 50 MB"
+}

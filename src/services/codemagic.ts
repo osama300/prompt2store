@@ -32,7 +32,7 @@ export class Codemagic {
   /** Apps for this repository, best first: GitHub-integration apps, then SSH-key apps, then plain URL apps. */
   async findAppsByRepo(repoUrl: string): Promise<LegacyApp[]> {
     const want = normalizeRepo(repoUrl);
-    const score = (a: LegacyApp) => (a.repository?.provider === "github" ? 0 : a.repository?.publicSshKey ? 1 : 2);
+    const score = (a: LegacyApp) => (a.repository?.provider === "github" ? 0 : canCloneSecurely(a) ? 1 : 2);
     return (await this.listApps())
       .filter((a) => !a.archived && a.repository && normalizeRepo(a.repository.htmlUrl ?? "") === want)
       .sort((a, b) => score(a) - score(b));
@@ -163,7 +163,7 @@ export interface LegacyApp {
   _id: string;
   appName: string;
   archived?: boolean;
-  repository?: { htmlUrl?: string; defaultBranch?: string; provider?: string; publicSshKey?: string | null };
+  repository?: { htmlUrl?: string; defaultBranch?: string; provider?: string; publicSshKey?: string | null; isAuthenticationEnabled?: boolean };
 }
 
 export interface V3Build {
@@ -186,6 +186,11 @@ export interface BuildAction {
   status?: string;
   started_at?: string;
   finished_at?: string;
+}
+
+/** An app cloned with an SSH key: Codemagic reports isAuthenticationEnabled (the key itself is not returned). */
+export function canCloneSecurely(a: LegacyApp): boolean {
+  return a.repository?.provider === "github" || !!a.repository?.publicSshKey || a.repository?.isAuthenticationEnabled === true;
 }
 
 export function normalizeRepo(url: string): string {

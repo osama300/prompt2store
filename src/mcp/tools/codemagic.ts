@@ -5,7 +5,7 @@ import { defineTool, GateError, type Ctx, type ToolDef } from "../context.js";
 import { requireCheckPassed, requireConnected } from "../gates.js";
 import { nowIso } from "../../state/store.js";
 import type { Build, State } from "../../state/schema.js";
-import { Codemagic, TERMINAL, buildPageUrl, mapStatus, normalizeRepo, toArtifacts } from "../../services/codemagic.js";
+import { Codemagic, TERMINAL, buildPageUrl, canCloneSecurely, mapStatus, normalizeRepo, toArtifacts } from "../../services/codemagic.js";
 import { codemagicYaml, WF, YAML_MARKER } from "../../services/codemagic-yaml.js";
 import { GitHub, generateDeployKey, parseGithubRemote } from "../../services/github.js";
 import { Git } from "../../lib/git.js";
@@ -145,7 +145,7 @@ async function prepareRepo(ctx: Ctx, s: State, opts: { commit: boolean; dryRun: 
     // integration or an SSH deploy key.
     const isPublic = ghRemote ? await githubRepoIsPublic(ghRemote.owner, ghRemote.repo) : true;
     const usable = (await client.findAppsByRepo(remoteUrl)).filter(
-      (a) => isPublic || a.repository?.provider === "github" || a.repository?.publicSshKey,
+      (a) => isPublic || canCloneSecurely(a),
     );
     if (usable[0]) {
       appId = usable[0]._id;
@@ -163,15 +163,6 @@ async function prepareRepo(ctx: Ctx, s: State, opts: { commit: boolean; dryRun: 
         await new GitHub(gh.token).addDeployKey(ghRemote.owner, ghRemote.repo, "Codemagic (prompt-to-store)", key.publicKeyOpenSsh);
         added = await client.addAppWithSshKey(`git@github.com:${ghRemote.owner}/${ghRemote.repo}.git`, key.privateKeyPem);
         steps.push("Added a read-only deploy key so Codemagic can clone the private repository");
-      } else {
-        // Without GitHub credentials: Codemagic's own GitHub integration may already cover this repo.
-        try {
-          const viaIntegration = await client.addApp(`https://github.com/${ghRemote!.owner}/${ghRemote!.repo}.git`);
-          const app = (await client.listApps()).find((x) => x._id === viaIntegration.id);
-          if (app?.repository?.provider === "github") added = viaIntegration;
-        } catch {
-          /* fall through */
-        }
       }
       if (!added) {
         const link = await ctx.ui.link("/connect/github").catch(() => undefined);
