@@ -19,6 +19,19 @@
 
 <img src="docs/assets/hero.png" alt="prompt-to-store" width="100%">
 
+<a href="docs/assets/demo.mp4"><img src="docs/assets/demo.gif" alt="عرض حي" width="100%"></a>
+
+</div>
+
+<div dir="rtl">
+
+**🎬 شاهد تجربة حقيقية في ٤٨ ثانية:** لا شيء في هذا العرض مُمثَّل.
+- وكيل برمجي بنى التطبيق من جملة واحدة.
+- كودمجيك بناه على حساب حقيقي.
+- رمز QR هو رابط التثبيت الفعلي.
+
+الوقت: نحو ٣ دقائق عمل للوكيل، و٧٫٨ دقيقة للبناء السحابي. [الفيديو كاملًا مع الصوت](docs/assets/demo.mp4) · [النسخة العمودية](docs/assets/demo-vertical.mp4)
+
 </div>
 
 <div dir="rtl">

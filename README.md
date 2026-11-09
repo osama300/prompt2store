@@ -25,6 +25,19 @@ Plan, build, test and ship a real Flutter app by talking to your agent. Your cod
 
 </div>
 
+## 🎬 See it work: 48 seconds, one real run
+
+<a href="docs/assets/demo.mp4"><img src="docs/assets/demo.gif" alt="Demo: one sentence to an installable app" width="100%"></a>
+
+<sub>Nothing in this demo is staged:
+<ul>
+<li>A coding agent built the app from the single sentence shown.</li>
+<li>The checks and screenshots ran headlessly.</li>
+<li>Codemagic built the APK on a real account.</li>
+<li>The QR code is the real install link.</li>
+</ul>
+Time: about 3 minutes of agent work plus a 7.8-minute cloud build. ▶ <a href="docs/assets/demo.mp4">Full video with sound</a> · <a href="docs/assets/demo-vertical.mp4">vertical version</a></sub>
+
 ---
 
 ## ✨ Why
@@ -257,13 +270,14 @@ The agent tells you exactly where to click.
 
 | Area | Status |
 |---|---|
-| MCP server, gates, skills, local UI, `setup` | ✅ 213 automated tests |
+| MCP server, gates, skills, local UI, `setup` | ✅ 232 automated tests |
+| Linux · Windows · macOS (Node 20 & 22) | ✅ CI on every push: unit tests, real MCP server, installer, real Flutter run with screenshots, git-free Flutter install |
 | Check with headless screenshots | ✅ verified on real apps |
 | Codemagic test builds (Android APK + iOS simulator) | ✅ verified end-to-end on a live account |
-| Agent run from an empty folder | ✅ verified with Claude Code |
+| Agent run from an empty folder | ✅ verified end-to-end with Claude Code (3 runs, incl. Arabic prompts) · 🟡 Codex, Cursor, Gemini CLI, Windsurf: configured by `setup`, not yet run end-to-end |
 | Google Play / App Store tools | 🟡 implemented and unit-tested against mocked APIs, not yet run against live store accounts |
 | Release signing workflows (AAB / TestFlight) | 🟡 implemented, not yet run live |
-| macOS Keychain and Windows | 🟡 implemented, not yet tested on those platforms |
+| macOS Keychain | 🟡 implemented, not yet tested on a real Mac login keychain |
 
 ## 🤝 Contributing
 

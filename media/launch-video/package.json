@@ -1,0 +1,16 @@
+{
+  "name": "prompt-to-store-launch-video",
+  "private": true,
+  "scripts": {
+    "music": "python3 compose.py",
+    "data": "python3 make_data.py",
+    "render": "remotion render src/index.ts Landscape out/landscape.mp4 && remotion render src/index.ts Vertical out/vertical.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.542",
+    "@remotion/transitions": "4.0.542",
+    "react": "^19",
+    "react-dom": "^19",
+    "remotion": "4.0.542"
+  }
+}
