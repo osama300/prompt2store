@@ -266,7 +266,7 @@ The agent tells you exactly where to click.
 
 ## 🗺️ Status
 
-**v0.1, preview.** Not yet published to npm.
+**v0.1, preview.** Published on npm as [`prompt-to-store`](https://www.npmjs.com/package/prompt-to-store).
 
 | Area | Status |
 |---|---|
