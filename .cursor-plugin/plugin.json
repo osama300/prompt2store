@@ -1,0 +1,31 @@
+{
+  "name": "prompt-to-store",
+  "description": "From one prompt to Google Play and the App Store, inside your coding agent: plan, build, test and ship a Flutter app via Codemagic.",
+  "version": "0.1.0",
+  "author": {
+    "name": "osama300"
+  },
+  "homepage": "https://github.com/osama300/prompt2store",
+  "repository": "https://github.com/osama300/prompt2store",
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "flutter",
+    "codemagic",
+    "app-store",
+    "google-play",
+    "agent-skills",
+    "mobile"
+  ],
+  "skills": "./skills/",
+  "mcpServers": {
+    "prompt-to-store": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "prompt-to-store@0.1.0",
+        "mcp"
+      ]
+    }
+  }
+}
